@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sec Repo Recon"
+  short_description: "Portable repository reconnaissance for local AppSec review"
+  default_prompt: "Map this repository for local AppSec review."

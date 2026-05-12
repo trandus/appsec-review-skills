@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sec Reporting"
+  short_description: "Evidence-based AppSec review reporting format"
+  default_prompt: "Prepare an evidence-based AppSec review report."

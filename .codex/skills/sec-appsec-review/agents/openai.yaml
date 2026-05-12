@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sec AppSec Review"
+  short_description: "Offline-first orchestrator for local AppSec code review."
+  default_prompt: "Run a local offline-first AppSec review and return an evidence-based report."

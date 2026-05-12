@@ -1,0 +1,129 @@
+{
+  "source": "OWASP Application Security Verification Standard",
+  "version": "5.0.0",
+  "license": "CC-BY-SA-4.0",
+  "identifier_format": "v5.0.0-<id>",
+  "note": "Focused offline dataset for local ASVS lookup; not a complete copy of ASVS.",
+  "requirements": [
+    {
+      "id": "1.2.5",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Encoding and Sanitization",
+      "area": "Injection Prevention",
+      "keywords": ["command injection", "os command", "shell", "injection"],
+      "summary": "Check whether the application protects against OS command injection and avoids building system commands from untrusted input."
+    },
+    {
+      "id": "1.5.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Encoding and Sanitization",
+      "area": "Output Encoding",
+      "keywords": ["xss", "encoding", "html", "javascript", "template"],
+      "summary": "Check whether output is encoded or sanitized for the target context."
+    },
+    {
+      "id": "2.1.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Validation and Business Logic",
+      "area": "Input Validation",
+      "keywords": ["validation", "input", "model binding", "business logic"],
+      "summary": "Check whether input is validated on the trusted side of the boundary before use."
+    },
+    {
+      "id": "3.2.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Web Frontend Security",
+      "area": "Browser Security",
+      "keywords": ["dom", "frontend", "xss", "sanitizer", "csp"],
+      "summary": "Check whether the frontend limits dangerous DOM operations and avoids bypassing sanitization without a trusted source."
+    },
+    {
+      "id": "4.1.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "API and Web Service",
+      "area": "Endpoint Protection",
+      "keywords": ["api", "endpoint", "route", "controller", "webhook"],
+      "summary": "Check whether API endpoints enforce appropriate access control, validation, and data limits."
+    },
+    {
+      "id": "5.1.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "File Handling",
+      "area": "Upload and Download",
+      "keywords": ["file", "upload", "download", "path traversal", "blob"],
+      "summary": "Check whether file operations constrain type, size, paths, access, and data disclosure."
+    },
+    {
+      "id": "6.1.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Authentication",
+      "area": "Authentication Controls",
+      "keywords": ["authentication", "login", "session", "token", "credential"],
+      "summary": "Check whether authentication is enforced server-side and resists common abuse paths."
+    },
+    {
+      "id": "7.1.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Session Management",
+      "area": "Session Controls",
+      "keywords": ["session", "cookie", "csrf", "sameSite", "logout"],
+      "summary": "Check whether sessions and cookies have secure attributes, safe lifecycle handling, and abuse protection."
+    },
+    {
+      "id": "8.1.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Authorization",
+      "area": "Access Control",
+      "keywords": ["authorization", "access control", "idor", "bola", "ownership", "tenant"],
+      "summary": "Check whether every operation enforces function-level and object-level authorization."
+    },
+    {
+      "id": "9.1.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Data Protection",
+      "area": "Sensitive Data",
+      "keywords": ["sensitive data", "pii", "privacy", "secret", "token", "payment"],
+      "summary": "Check whether sensitive data is minimized, protected in flows, and kept out of unauthorized locations."
+    },
+    {
+      "id": "10.1.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Cryptography",
+      "area": "Cryptographic Controls",
+      "keywords": ["crypto", "encryption", "hash", "random", "key"],
+      "summary": "Check whether cryptography uses proven mechanisms, avoids custom algorithms, and protects keys appropriately."
+    },
+    {
+      "id": "11.1.1",
+      "levels": ["L2", "L3"],
+      "chapter": "Business Logic",
+      "area": "Abuse Resistance",
+      "keywords": ["abuse", "rate limit", "replay", "automation", "business logic"],
+      "summary": "Check whether costly, repeatable, or sensitive actions have abuse controls and business-rule validation."
+    },
+    {
+      "id": "12.1.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Secure Configuration",
+      "area": "Configuration",
+      "keywords": ["configuration", "secret", "cors", "debug", "headers"],
+      "summary": "Check whether configuration avoids secret exposure and unsafe settings in the target environment."
+    },
+    {
+      "id": "13.1.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Logging and Error Handling",
+      "area": "Logging",
+      "keywords": ["logging", "monitoring", "audit", "error", "pii"],
+      "summary": "Check whether security events are logged and logs or errors avoid disclosing sensitive data."
+    },
+    {
+      "id": "14.1.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Supply Chain",
+      "area": "Dependencies",
+      "keywords": ["dependency", "package", "nuget", "npm", "supply chain", "lockfile"],
+      "summary": "Check whether dependencies and supply chain inputs are controlled, versioned, and reviewed for known risks."
+    }
+  ]
+}

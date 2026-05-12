@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sec ASVS Review"
+  short_description: "Offline OWASP ASVS lookup and finding mapping"
+  default_prompt: "Map findings to local OWASP ASVS requirements offline."
