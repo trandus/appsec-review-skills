@@ -60,7 +60,7 @@ Briefly describe the most important risks, scope, and limitations. Do not claim 
 - Remediation:
 - Regression Test:
 - ASVS Mapping:
-- OWASP Top 10 Category:
+- OWASP Web/API Top 10 Category:
 
 ## Observations
 

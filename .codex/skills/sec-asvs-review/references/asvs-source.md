@@ -4,7 +4,7 @@ Dataset `asvs-5.0.0-local.json` is a focused local list of requirements prepared
 
 ## Review Checks
 
-- Use ASVS as the requirement and finding-mapping standard; use OWASP Top 10 only as an optional risk category.
+- Use ASVS as the requirement and finding-mapping standard; use OWASP Web Top 10 and OWASP API Security Top 10 only as optional risk categories.
 - Record mappings with the versioned format `v5.0.0-<chapter>.<section>.<requirement>`.
 - Select the most specific local requirement that matches the confirmed finding.
 - If no good mapping exists in the local dataset, explain the lack of suitable `ASVS Mapping` instead of forcing one.
@@ -20,7 +20,7 @@ Dataset `asvs-5.0.0-local.json` is a focused local list of requirements prepared
 ## Common Findings
 
 - Finding mapped to a broad or unrelated ASVS item because a closer requirement was not checked.
-- OWASP Top 10 category used as a replacement for ASVS mapping.
+- OWASP Web/API Top 10 category used as a replacement for ASVS mapping.
 - ASVS level treated as severity or as proof of complete coverage.
 - Report claims complete ASVS conformance from the focused local dataset.
 

@@ -44,6 +44,6 @@ Each `Finding` contains:
 - Remediation,
 - Regression Test or validation,
 - `ASVS Mapping` or a rationale for no suitable mapping,
-- optional `OWASP Top 10 Category`.
+- optional `OWASP Web/API Top 10 Category`.
 
 The report template is in `references/report-template.md`.

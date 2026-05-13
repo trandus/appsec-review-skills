@@ -1,11 +1,11 @@
 ---
 name: sec-asvs-review
-description: Local OWASP ASVS component for offline requirement lookup, L1/L2/L3 selection, and AppSec finding mapping. Use when a review needs ASVS Mapping, a clear distinction between ASVS and OWASP Top 10, or requirement lookup without internet access.
+description: Local OWASP ASVS component for offline requirement lookup, L1/L2/L3 selection, and AppSec finding mapping. Use when a review needs ASVS Mapping, a clear distinction between ASVS and OWASP Web/API Top 10, or requirement lookup without internet access.
 ---
 
 # sec-asvs-review
 
-Use OWASP ASVS as the requirements and finding-mapping standard. OWASP Top 10 is only a supporting risk category; it does not replace ASVS and it does not have `L1`, `L2`, or `L3` levels.
+Use OWASP ASVS as the requirements and finding-mapping standard. OWASP Web Top 10 and OWASP API Security Top 10 are only supporting risk categories; they do not replace ASVS and they do not have `L1`, `L2`, or `L3` levels.
 
 ## Offline Data
 
@@ -21,7 +21,7 @@ The dataset is a focused local reference set for offline lookup and mapping of c
 2. Search requirements by chapter, keyword, or risk class. Use the helper or read the JSON directly.
 3. Select the most specific applicable requirement. If only broad requirements match, or no good mapping exists, record why there is no suitable `ASVS Mapping`.
 4. Record mapped requirements with the versioned format, for example `v5.0.0-2.1.1`.
-5. Add `OWASP Top 10 Category` only as an optional label, for example `A01 Broken Access Control`.
+5. Add `OWASP Web/API Top 10 Category` only as an optional label, for example `A01 Broken Access Control` or `API1:2023 Broken Object Level Authorization`.
 
 ## Helper Examples
 
