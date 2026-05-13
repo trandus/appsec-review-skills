@@ -16,7 +16,7 @@
 - File, route, symbol, configuration key, dependency manifest, or test location is named precisely.
 - Evidence shows how the issue is reachable and why the existing control is absent or ineffective.
 - Scanner or audit output is tied to the local dependency, code path, commit, or configuration under review.
-- Follow-ups explain what current documentation, scanner, runtime, SaaS, cloud, or environment check is still needed.
+- Follow-ups explain what separate reference-refresh, scanner, runtime, SaaS, cloud, or environment check is still needed.
 
 ## Common Findings
 
@@ -30,7 +30,7 @@
 - Do not convert hypotheses, stale scanner output, or undocumented current framework behavior into findings.
 - Current CVEs/advisories, SaaS settings, cloud defaults, identity-provider behavior, and scanner rule semantics need local evidence or `Follow-up`.
 - The report is not a penetration test, full ASVS certification, legal assessment, or runtime assurance.
-- If local references are insufficient for a framework, SDK, CLI, cloud service, or tool, write a `Follow-up` and continue with locally reviewable evidence.
+- If local references are insufficient for a framework, SDK, CLI, cloud service, or tool, write a `Follow-up` for a separate reference-refresh task and continue with locally reviewable evidence.
 
 ## Findings
 
@@ -70,4 +70,4 @@
 
 ## Sources
 
-See repository-root `SEC-README.md` for source links.
+See repository-root `SEC-README.md` for local source notes.

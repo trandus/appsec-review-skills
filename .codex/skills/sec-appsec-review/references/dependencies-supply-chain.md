@@ -32,7 +32,7 @@
 - Offline review does not confirm current CVEs, advisories, exploitability, package reputation, or latest safe versions without local tool output or access to a current vulnerability database.
 - Current dependency vulnerabilities without local evidence belong in `Follow-up`, not `Finding`.
 - Treat `npm audit`, `dotnet package list --vulnerable`, `dotnet list package --vulnerable`, NuGet audit, CodeQL, Semgrep, and secret-scan reports as input that still needs local confirmation of path, version, reachability, and relevance.
-- If npm, NuGet, CodeQL, Semgrep, registry, SDK, CLI, or cloud behavior is decisive and local references are insufficient, record a `Follow-up` to refresh references or check official documentation.
+- If npm, NuGet, CodeQL, Semgrep, registry, SDK, CLI, or cloud behavior is decisive and local references are insufficient, record a `Follow-up` for a separate reference-refresh task.
 - Do not run scanners automatically during normal review unless the user explicitly requests or accepts it and host-repository rules allow it.
 - If a tool needs internet access, authentication, a vulnerability database, a CodeQL database, a successful build, or unavailable configuration, state the limitation and report unresolved items as `Observation` or `Follow-up`.
 

@@ -25,7 +25,7 @@
 ## Offline Boundaries
 
 - Without access to deployed log sinks, retention policies, alert rules, or telemetry backend, report only local logging behavior and missing local controls.
-- If current logging framework, SDK, cloud telemetry, or hosting behavior is decisive, record a `Follow-up` for official documentation or environment validation.
+- If logging framework, SDK, cloud telemetry, or hosting behavior is decisive and not proven locally, record a `Follow-up` for a separate reference-refresh task or environment validation.
 - Lack of monitoring alerts is usually a `Follow-up` unless the repo explicitly defines required alerts and omits them.
 - Do not infer privacy-law compliance from code review alone.
 

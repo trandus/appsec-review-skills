@@ -25,7 +25,7 @@
 ## Offline Boundaries
 
 - Do not claim a current framework, SDK, CLI, cloud, or SaaS behavior unless it is documented locally or proven in code.
-- If current behavior matters and local references are insufficient, record a `Follow-up` to refresh the reference or check official documentation.
+- If current behavior matters and local references are insufficient, record a `Follow-up` for a separate reference-refresh task.
 - Without runtime access, scanners, or environment configuration, keep deployment-specific exposure as `Observation` or `Follow-up` unless repo evidence proves it.
 - Threat modeling creates review priorities; it does not create a `Finding` without code evidence or a traced missing control.
 

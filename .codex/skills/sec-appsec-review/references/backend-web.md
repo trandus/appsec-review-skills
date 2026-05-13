@@ -29,8 +29,8 @@
 
 ## Offline Boundaries
 
-- Do not assume ASP.NET Core, reverse-proxy, hosting, browser, or cloud defaults beyond local configuration and current documentation.
-- If the current behavior of a framework, SDK, CLI, cloud service, or hosting feature is required to decide, record a `Follow-up` to refresh references or check official docs.
+- Do not assume ASP.NET Core, reverse-proxy, hosting, browser, or cloud defaults beyond local configuration and bundled references.
+- If the behavior of a framework, SDK, CLI, cloud service, or hosting feature is required to decide and not proven locally, record a `Follow-up` for a separate reference-refresh task.
 - Without running the app, treat middleware execution and environment-specific branches as code-review evidence only.
 - Deployment-only controls such as WAF, gateway auth, TLS policy, or platform headers need local IaC/config evidence before they can reduce a finding.
 

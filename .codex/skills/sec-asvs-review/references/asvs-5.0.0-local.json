@@ -6,7 +6,7 @@
   "note": "Focused offline dataset for local ASVS lookup. It contains only mappings currently used by the sec-* review flow; it is not a complete copy of ASVS, not all L1, and not a certification dataset.",
   "selection": {
     "basis": "Official OWASP ASVS 5.0.0 release asset OWASP_Application_Security_Verification_Standard_5.0.0_en.flat.json downloaded during reference refresh.",
-    "included": "Compact mappings for current sec-* prompts and references: exploitable web/API paths, authentication, session and token handling, authorization, API object/property/function checks, input/data handling, files, SSRF, configuration, data protection, logging, supply chain, mass assignment, resource consumption, and abuse resistance.",
+    "included": "Compact mappings for current sec-* prompts and references: exploitable web/API paths, authentication, session and token handling, authorization, API object/property/function checks, input/data handling, files, SSRF, CSRF/browser-based request forgery, cookie setup, configuration, data protection, logging, supply chain, mass assignment, resource consumption, and abuse resistance.",
     "excluded": "Requirements not currently used by the review prompts or local references. Add new ASVS entries only when a skill, reference, or prompt needs that mapping."
   },
   "requirements": [
@@ -145,6 +145,14 @@
       "area": "Unintended Content Interpretation",
       "keywords": ["file", "upload", "frontend", "unintended", "content", "interpretation", "place", "browsers", "rendering", "functionality", "http", "responses", "incorrect", "context"],
       "summary": "Check whether security controls are in place to prevent browsers from rendering content or functionality in HTTP responses in an incorrect context (e.g., when an API, a user-uploaded file or other resource is requested directly). Possible controls could."
+    },
+    {
+      "id": "3.3.2",
+      "levels": ["L2", "L3"],
+      "chapter": "Web Frontend Security",
+      "area": "Cookie Setup",
+      "keywords": ["csrf", "cross-site request forgery", "cross site request forgery", "browser-based request forgery", "request forgery", "antiforgery", "anti-forgery", "samesite", "cookie", "cookies", "state-changing", "state changing", "frontend", "web", "browser"],
+      "summary": "Check whether each cookie's SameSite attribute is set according to the cookie's purpose to limit exposure to user interface redress attacks and browser-based request forgery attacks, commonly known as CSRF."
     },
     {
       "id": "4.1.1",

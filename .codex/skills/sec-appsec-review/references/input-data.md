@@ -28,7 +28,7 @@
 
 ## Offline Boundaries
 
-- If a framework parser, sanitizer, serializer, or validation library's current behavior is decisive and not locally documented, record a `Follow-up` for official documentation.
+- If a framework parser, sanitizer, serializer, or validation library behavior is decisive and not locally documented, record a `Follow-up` for a separate reference-refresh task.
 - Do not classify a sink as vulnerable if local code shows a safe API and no bypass path.
 - Without runtime payload testing, report only flows proven by code or missing-control tracing.
 - Scanner findings supplied by the user need local confirmation before becoming a `Finding`.

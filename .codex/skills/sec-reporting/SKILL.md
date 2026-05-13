@@ -19,7 +19,7 @@ Keep English only when it is a strong domain term without a reasonable Polish eq
 
 - **Finding**: a confirmed vulnerability or material risk with location, evidence, Risk Path, and Impact.
 - **Observation**: a design observation, weakened control, tool signal, or incomplete hypothesis without enough evidence for a finding.
-- **Follow-up**: a question, tool validation, need for current documentation, unavailable network/login/database/configuration, or separate check.
+- **Follow-up**: a question, tool validation, separate reference-refresh need, unavailable network/login/database/configuration, or separate check.
 
 ## Required Report Sections
 

@@ -25,7 +25,7 @@
 ## Offline Boundaries
 
 - Do not infer cloud gateway, CDN, WAF, identity-provider, or reverse-proxy protections without local IaC/configuration evidence.
-- If a framework's current routing, binding, or middleware behavior decides the risk and local references are insufficient, record a `Follow-up` for official documentation.
+- If a framework's routing, binding, or middleware behavior decides the risk and local references are insufficient, record a `Follow-up` for a separate reference-refresh task.
 - Without running the app, treat generated route completeness and environment-only exposure as limited unless route maps or build artifacts are present.
 - A finding requires a concrete entry point and a traced missing control or vulnerable sink.
 

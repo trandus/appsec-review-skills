@@ -30,8 +30,8 @@
 
 - Report a `Finding` only when local code, configuration, tests, manifests, OpenAPI files, generated clients, IaC, or a traced missing control supports it.
 - Use `Observation` for partial evidence, such as a suspicious DTO, route, or config that needs runtime behavior, deployment configuration, or product-owner confirmation.
-- Use `Follow-up` when deciding the issue requires current framework, gateway, cloud, SaaS, identity-provider, scanner, or production configuration behavior that is not present locally.
-- Do not assume gateway auth, WAF, CDN throttling, cloud defaults, third-party API guarantees, or unpublished API inventory unless local config or refreshed official documentation supports it.
+- Use `Follow-up` when deciding the issue requires framework, gateway, cloud, SaaS, identity-provider, scanner, or production configuration behavior that is not present locally.
+- Do not assume gateway auth, WAF, CDN throttling, cloud defaults, third-party API guarantees, or unpublished API inventory unless local code, configuration, or bundled references support it. If support is missing, record a separate reference-refresh or environment-validation `Follow-up`.
 
 ## Sources
 

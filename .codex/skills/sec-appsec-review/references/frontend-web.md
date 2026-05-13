@@ -27,7 +27,7 @@
 ## Offline Boundaries
 
 - Do not guess current framework sanitizer, CSP, Trusted Types, browser, or bundler behavior when local references are insufficient.
-- If Angular, another framework, a SDK, a CLI, or browser behavior is decisive, record a `Follow-up` to check official documentation or refresh the reference.
+- If Angular, another framework, a SDK, a CLI, or browser behavior is decisive and not proven locally, record a `Follow-up` for a separate reference-refresh task.
 - Without built assets or runtime inspection, bundle exposure and CSP effectiveness may need `Follow-up`.
 - A frontend issue becomes an access-control finding only when backend trust or missing server-side enforcement is traced.
 

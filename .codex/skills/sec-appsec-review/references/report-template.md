@@ -8,8 +8,8 @@
 - Report a `Finding` only when local code evidence or a traced missing control supports it.
 - Include `Location`, `Evidence`, `Attack Variant`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, and `ASVS Mapping` or a mapping rationale.
 - If the prompt requests persisted artifacts, save the exact prompt to `docs/appsec/{data_iso}_{aplikacja}-prompt.md` and this report to `docs/appsec/{data_iso}_{aplikacja}.md`.
-- Record current-documentation, scanner, runtime, SaaS, cloud, and environment checks as `Follow-up` when they cannot be proven locally.
-- Keep source attribution short; source links live in repository-root `SEC-README.md`.
+- Record separate reference-refresh, scanner, runtime, SaaS, cloud, and environment checks as `Follow-up` when they cannot be proven locally.
+- Keep source attribution short; source notes live in repository-root `SEC-README.md`.
 
 ## Evidence Signals
 
@@ -28,7 +28,7 @@
 ## Offline Boundaries
 
 - Do not use a current CVE, advisory, framework behavior, cloud default, or scanner rule as a finding unless the result is locally present or documented in the reviewed repo.
-- If local references do not resolve current behavior, write a `Follow-up` to refresh the reference or check official documentation.
+- If local references do not resolve current behavior, write a `Follow-up` for a separate reference-refresh task.
 - Do not claim penetration testing, runtime exploitation, complete ASVS verification, or legal compliance from offline code review.
 - Do not include long source-link lists in each report; use repository-root `SEC-README.md`.
 
@@ -78,4 +78,4 @@ Briefly describe the most important risks, scope, and limitations. Do not claim 
 
 ## Sources
 
-See repository-root `SEC-README.md` for source links.
+See repository-root `SEC-README.md` for local source notes.

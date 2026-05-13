@@ -27,7 +27,7 @@
 
 - A secret-looking value is a finding only when local evidence shows it is live, production-like, or materially risky; otherwise use `Observation` or `Follow-up`.
 - Do not assume cloud secret stores, managed identity, CI masking, or platform configuration unless local IaC/config proves it.
-- If current SDK, CLI, cloud, or framework configuration precedence is decisive, record a `Follow-up` to check official documentation.
+- If SDK, CLI, cloud, or framework configuration precedence is decisive and not proven locally, record a `Follow-up` for a separate reference-refresh task.
 - Without access to deployed environment variables or secret stores, report missing validation and risky defaults, not unproven deployment exposure.
 
 ## Sources

@@ -78,5 +78,5 @@ Each reference is a short operating guide. Do not treat it as a complete checkli
 ## Boundaries
 
 - The review may accept user-provided tool output as context, or run local tools only when explicitly requested or accepted by the user. The package does not run or require scanners during normal use.
-- When current documentation for a library, framework, SDK, CLI, cloud service, or tool is needed beyond the local references, record it as a `Follow-up` or a reference-refresh task.
+- When current behavior for a library, framework, SDK, CLI, cloud service, or tool cannot be determined from local code, configuration, or bundled references, record it as a `Follow-up` for a separate reference-refresh task. Do not fetch documentation during normal offline review.
 - Change code only when the user separately asks for a specific finding to be fixed.

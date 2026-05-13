@@ -31,7 +31,7 @@
 ## Offline Boundaries
 
 - Do not claim identity-provider, token lifetime, claim issuance, or cookie behavior unless local configuration or official refreshed documentation supports it.
-- If the current behavior of an auth library, SDK, cloud identity provider, or framework policy system is decisive, create a `Follow-up` to check official documentation.
+- If the behavior of an auth library, SDK, cloud identity provider, or framework policy system is decisive and not proven locally, create a `Follow-up` for a separate reference-refresh task.
 - Without runtime session traces, keep cookie/token transport assumptions as `Observation` unless code/config proves the issue.
 - Missing negative tests are supporting evidence, not a finding by themselves, unless the implementation path confirms the missing control.
 

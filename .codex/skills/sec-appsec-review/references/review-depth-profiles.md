@@ -15,7 +15,7 @@
 - Reviewed paths match the selected profile and the final report explains skipped areas.
 - Scope decisions show what was sampled, what was traced end-to-end, and what was deferred.
 - Findings include code evidence or traced missing controls; hypotheses are separated into `Observation` or `Follow-up`.
-- Follow-ups capture tool validation, runtime checks, current documentation checks, and out-of-scope areas.
+- Follow-ups capture tool validation, runtime checks, separate reference-refresh tasks, and out-of-scope areas.
 
 ## Common Findings
 
@@ -27,10 +27,10 @@
 ## Offline Boundaries
 
 - Depth does not grant internet, scanner, runtime, SaaS, or cloud access by default.
-- If current behavior of a framework, SDK, CLI, cloud, or tool is required and local references are insufficient, record a `Follow-up`.
+- If current behavior of a framework, SDK, CLI, cloud, or tool is required and local references are insufficient, record a `Follow-up` for a separate reference-refresh task.
 - Do not claim complete ASVS coverage or certification from this focused offline reference set.
 - User-provided scanner output can expand evidence but still needs local triage.
 
 ## Sources
 
-See repository-root `SEC-README.md` for source links.
+See repository-root `SEC-README.md` for local source notes.
