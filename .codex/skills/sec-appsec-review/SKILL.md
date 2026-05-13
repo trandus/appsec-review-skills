@@ -1,6 +1,6 @@
 ---
 name: sec-appsec-review
-description: Offline-first AppSec code review orchestrator. Use when the user asks for a repository security review, a focused review of one security area, a compact end-to-end AppSec flow, ASVS mapping, or a report with Remediation and Fix Prompt entries without implementing fixes.
+description: Offline-first AppSec code review orchestrator. Use when the user asks for a repository security review, a focused review of one security area, a compact end-to-end AppSec flow, ASVS mapping, or a report with Remediation and Regression Test entries without implementing fixes.
 ---
 
 # sec-appsec-review
@@ -47,11 +47,15 @@ Depth details are in `references/review-depth-profiles.md`.
 5. Confirm findings only with code evidence or a traced path showing that a required security control is absent.
 6. Map findings to ASVS through `sec-asvs-review`. Treat OWASP Top 10 only as a supporting risk category.
 7. Use `sec-reporting` and `references/report-template.md` for the final report. Include `Findings`, `Observations`, and `Follow-up` when those categories occur; state that a category has no results when it is empty.
-8. Do not implement fixes during review. For each finding, return `Remediation` and a `Fix Prompt` for a separate repair task.
+8. Do not implement fixes during review. For each finding, return `Remediation` and `Regression Test`.
 
 ## Report Language
 
-The final review report must always be written in Polish. Technical section and field names may remain in English, such as `Findings`, `Observations`, `Follow-up`, `Evidence`, `Attack Variant`, `Risk Path`, `ASVS Mapping`, and `Fix Prompt`, but the explanatory content must be Polish.
+The final review report must always be written in Polish. Use clear Polish prose for risk descriptions, evidence explanations, impact, remediation, regression tests, observations, and follow-ups. Keep English only for established domain terms without a reasonable Polish equivalent, exact report field names, standards, vulnerability classes, libraries, tools, headers, configuration keys, APIs, and code identifiers.
+
+Avoid casual Polish-English mixing inside explanatory sentences. Prefer natural Polish words when they exist, for example evidence -> `dowód`, impact -> `wpływ`, risk path -> `ścieżka ryzyka`, remediation -> `zalecenie`, regression test -> `test regresyjny`, permission -> `uprawnienie`, owner -> `właściciel zasobu`. Keep concise technical terms when they improve precision, for example `XSS`, `SSRF`, `CSRF`, `IDOR/BOLA`, `JWT`, `OAuth/OIDC`, `claim`, `tenant`, `endpoint`, `cookie`, and `lockfile`.
+
+When a review is launched from a prompt, preserve the exact prompt and final report as artifacts when requested. Use `docs/appsec/{data_iso}_{aplikacja}-prompt.md` for the prompt and `docs/appsec/{data_iso}_{aplikacja}.md` for the report, where `{aplikacja}` is a short repository, application, scope, or sweep slug.
 
 ## Area References
 

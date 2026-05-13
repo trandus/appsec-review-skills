@@ -2,10 +2,12 @@
 
 ## Review Checks
 
-- Write the final report in Polish. Technical labels may stay in English, but summaries, evidence explanations, risk paths, impact, remediation, regression tests, observations, follow-ups, and fix prompts must be Polish.
+- Write the final report in Polish. Use English only for established domain terms without a reasonable Polish equivalent, exact report field names, standards, vulnerability classes, libraries, tools, headers, configuration keys, APIs, and code identifiers.
+- Avoid casual Polish-English mixing. Prefer natural Polish words in explanatory prose, for example `dowód`, `wpływ`, `ścieżka ryzyka`, `zalecenie`, `test regresyjny`, `uprawnienie`, and `właściciel zasobu`.
 - Separate `Findings`, `Observations`, `Follow-up`, and `Out of Scope` instead of mixing confidence levels. If a category has no entries, state that explicitly.
 - Report a `Finding` only when local code evidence or a traced missing control supports it.
-- Include `Location`, `Evidence`, `Attack Variant`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, `ASVS Mapping` or a mapping rationale, and `Fix Prompt`.
+- Include `Location`, `Evidence`, `Attack Variant`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, and `ASVS Mapping` or a mapping rationale.
+- If the prompt requests persisted artifacts, save the exact prompt to `docs/appsec/{data_iso}_{aplikacja}-prompt.md` and this report to `docs/appsec/{data_iso}_{aplikacja}.md`.
 - Record current-documentation, scanner, runtime, SaaS, cloud, and environment checks as `Follow-up` when they cannot be proven locally.
 - Keep source attribution short; source links live in repository-root `SEC-README.md`.
 
@@ -59,10 +61,6 @@ Briefly describe the most important risks, scope, and limitations. Do not claim 
 - Regression Test:
 - ASVS Mapping:
 - OWASP Top 10 Category:
-
-#### Fix Prompt
-
-Fix finding `<title>` within `<scope>`. Start from `<files/symbols>`. Risk: `<description>`. Expected behavior after the fix: `<description>`. Apply remediation direction `<approach>`. Add or update regression test `<test>`. Preserve local repository conventions and do not expand scope beyond this finding.
 
 ## Observations
 

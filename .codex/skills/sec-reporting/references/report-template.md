@@ -2,10 +2,12 @@
 
 ## Review Checks
 
-- Write the final report in Polish. Technical labels may stay in English, but summaries, evidence explanations, risk paths, impact, remediation, regression tests, observations, follow-ups, and fix prompts must be Polish.
+- Write the final report in Polish. Use English only for established domain terms without a reasonable Polish equivalent, exact report field names, standards, vulnerability classes, libraries, tools, headers, configuration keys, APIs, and code identifiers.
+- Avoid casual Polish-English mixing. Prefer natural Polish words in explanatory prose, for example `dowód`, `wpływ`, `ścieżka ryzyka`, `zalecenie`, `test regresyjny`, `uprawnienie`, and `właściciel zasobu`.
 - Separate confirmed `Findings` entries from `Observations` and `Follow-up`. If a category has no entries, state that explicitly.
 - Require local evidence or a traced missing control for every finding.
-- Include remediation and a `Fix Prompt` without implementing the fix.
+- Include remediation and regression-test guidance without implementing the fix.
+- If the prompt requests persisted artifacts, save the exact prompt to `docs/appsec/{data_iso}_{aplikacja}-prompt.md` and this report to `docs/appsec/{data_iso}_{aplikacja}.md`.
 - Use ASVS mapping when a suitable local requirement exists; explain when no good mapping applies.
 - Keep source lists short and point to repository-root `SEC-README.md` for refresh links.
 
@@ -47,7 +49,6 @@
 - Regression Test:
 - ASVS Mapping:
 - OWASP Top 10 Category:
-- Fix Prompt:
 
 ## Observations
 

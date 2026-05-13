@@ -7,7 +7,7 @@
 - `sec-appsec-review`: orkiestrator review, wybór scope, `Review Depth`, `ASVS Level`, flow i raport końcowy.
 - `sec-repo-recon`: rozpoznanie struktury repo, stacku, entry pointów, konfiguracji, zależności i opcjonalnych lokalnych zasad hostującego repo.
 - `sec-asvs-review`: lokalny lookup OWASP ASVS, poziomy `L1`, `L2`, `L3`, `ASVS Mapping` i rozróżnienie ASVS od OWASP Top 10.
-- `sec-reporting`: format raportu, rozdzielenie `Findings`, `Observations`, `Follow-up` oraz blok `Fix Prompt`.
+- `sec-reporting`: format raportu oraz rozdzielenie `Findings`, `Observations` i `Follow-up`.
 
 ## Szybki Start
 
@@ -36,15 +36,17 @@ ASVS jest głównym standardem wymagań i mapowania. OWASP Top 10 jest tylko pom
 
 ## Format Raportu
 
-Raport po review zawsze ma być napisany po polsku. Techniczne nazwy sekcji i pól mogą pozostać po angielsku.
+Raport po review zawsze ma być napisany po polsku. Używaj normalnego, czytelnego języka polskiego w opisach ryzyka, dowodów, wpływu, rekomendacji i testów. Angielskie określenia zostawiaj tylko wtedy, gdy są utrwalonymi terminami domenowymi bez rozsądnego polskiego odpowiednika albo jednoznacznymi nazwami standardów, klas podatności, pól raportu, bibliotek, narzędzi, nagłówków, konfiguracji lub API.
+
+Unikaj przypadkowego mieszania polskiego i angielskiego w jednym zdaniu. Jeśli polski odpowiednik jest naturalny, użyj polskiego, np. `dowód`, `wpływ`, `ścieżka ryzyka`, `zalecenie`, `test regresyjny`, `uprawnienie`, `właściciel zasobu`. Zachowuj krótkie terminy techniczne tam, gdzie poprawiają precyzję, np. `XSS`, `SSRF`, `CSRF`, `IDOR/BOLA`, `JWT`, `OAuth/OIDC`, `claim`, `tenant`, `endpoint`, `cookie`, `lockfile`.
 
 Każdy raport musi zawierać sekcje `Findings`, `Observations` i `Follow-up`, jeśli te kategorie realnie występują. Jeśli kategoria nie ma wyników, napisz to jawnie, np. `Findings: brak potwierdzonych findingów`.
 
-- `Finding`: potwierdzony problem z `Title`, `Severity`, `Confidence`, `Status`, `Location`, `Evidence`, `Attack Variant`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, `ASVS Mapping` albo uzasadnieniem braku mapowania, opcjonalnym `OWASP Top 10 Category` oraz `Fix Prompt`.
+- `Finding`: potwierdzony problem z `Title`, `Severity`, `Confidence`, `Status`, `Location`, `Evidence`, `Attack Variant`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, `ASVS Mapping` albo uzasadnieniem braku mapowania oraz opcjonalnym `OWASP Top 10 Category`.
 - `Observation`: obserwacja projektowa, osłabiona kontrola, sygnał narzędziowy albo hipoteza bez wystarczającego dowodu.
 - `Follow-up`: pytanie, walidacja narzędziowa, potrzeba aktualnej dokumentacji, niedostępny runtime/login/baza/konfiguracja albo osobne sprawdzenie.
 
-Review nie implementuje zmian. Dla findingów zwraca `Remediation` i `Fix Prompt` do osobnego zadania naprawczego.
+Review nie implementuje zmian. Dla findingów zwraca `Remediation` oraz `Regression Test`.
 
 ## Prompty
 
@@ -84,7 +86,10 @@ Wymagania:
 - Dla operacji wysokiego wpływu sprawdź CSRF/antiforgery tam gdzie ma zastosowanie, replay, TOCTOU, idempotency, audit logging i cleanup zależności.
 - Nie implementuj poprawek. `Finding` raportuj tylko z dowodem w kodzie albo prześledzonym brakiem wymaganej kontroli. Hipotezy przenieś do `Observations` albo `Follow-up`.
 
-Output: zwróć raport po polsku z sekcjami `Findings`, `Observations` i `Follow-up`, jeśli realnie występują. Jeśli sekcja nie ma wyników, napisz to jawnie. Każdy `Finding` musi zawierać `Title`, `Severity`, `Confidence`, `Status`, `Location`, `Evidence`, `Attack Variant`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, `ASVS Mapping`, opcjonalne `OWASP Top 10 Category` i `Fix Prompt`.
+Output: zwróć raport po polsku z sekcjami `Findings`, `Observations` i `Follow-up`, jeśli realnie występują. Jeśli sekcja nie ma wyników, napisz to jawnie. Każdy `Finding` musi zawierać `Title`, `Severity`, `Confidence`, `Status`, `Location`, `Evidence`, `Attack Variant`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, `ASVS Mapping` i opcjonalne `OWASP Top 10 Category`.
+
+Zapisz użyty prompt w `docs/appsec/{data_iso}_{aplikacja}-prompt.md`.
+Zapisz raport w `docs/appsec/{data_iso}_{aplikacja}.md`.
 ```
 
 ### 2. Ten Sam Zakres Dla Wskazanej Aplikacji Albo Folderów
@@ -121,7 +126,10 @@ Wymagania:
 - Dla auth/session sprawdź reset hasła, invite/magic link, MFA, logout, token revocation, stale sessions, privilege change/downgrade, admin-only flows i forced browsing.
 - Nie implementuj poprawek. `Finding` raportuj tylko dla problemów potwierdzonych w `<scope>`. Hipotezy przenieś do `Observations` albo `Follow-up`.
 
-Output: zwróć raport po polsku z sekcjami `Findings`, `Observations`, `Follow-up` oraz `Out of Scope`, jeśli realnie występują. Jeśli sekcja nie ma wyników, napisz to jawnie. Każdy `Finding` musi zawierać `Title`, `Severity`, `Confidence`, `Status`, `Location`, `Evidence`, `Attack Variant`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, `ASVS Mapping`, opcjonalne `OWASP Top 10 Category` i `Fix Prompt`.
+Output: zwróć raport po polsku z sekcjami `Findings`, `Observations`, `Follow-up` oraz `Out of Scope`, jeśli realnie występują. Jeśli sekcja nie ma wyników, napisz to jawnie. Każdy `Finding` musi zawierać `Title`, `Severity`, `Confidence`, `Status`, `Location`, `Evidence`, `Attack Variant`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, `ASVS Mapping` i opcjonalne `OWASP Top 10 Category`.
+
+Zapisz użyty prompt w `docs/appsec/{data_iso}_{aplikacja}-prompt.md`.
+Zapisz raport w `docs/appsec/{data_iso}_{aplikacja}.md`.
 ```
 
 ### 3. Dodatkowy Sweep Dla Podatności Spoza Głównego Zakresu
@@ -152,7 +160,10 @@ Wymagania:
 - Jeśli decyzja zależy od runtime, reverse proxy, CDN, cloud gateway, WAF, konfiguracji produkcyjnej albo aktualnej dokumentacji, przenieś to do `Follow-up`.
 - Nie implementuj poprawek.
 
-Output: zwróć raport po polsku z sekcjami `Findings`, `Observations` i `Follow-up`, jeśli realnie występują. Jeśli sekcja nie ma wyników, napisz to jawnie. Każdy `Finding` musi zawierać `Title`, `Severity`, `Confidence`, `Status`, `Location`, `Evidence`, `Attack Variant`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, `ASVS Mapping` albo uzasadnienie braku mapowania, opcjonalne `OWASP Top 10 Category` i `Fix Prompt`.
+Output: zwróć raport po polsku z sekcjami `Findings`, `Observations` i `Follow-up`, jeśli realnie występują. Jeśli sekcja nie ma wyników, napisz to jawnie. Każdy `Finding` musi zawierać `Title`, `Severity`, `Confidence`, `Status`, `Location`, `Evidence`, `Attack Variant`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, `ASVS Mapping` albo uzasadnienie braku mapowania oraz opcjonalne `OWASP Top 10 Category`.
+
+Zapisz użyty prompt w `docs/appsec/{data_iso}_{aplikacja}-prompt.md`.
+Zapisz raport w `docs/appsec/{data_iso}_{aplikacja}.md`.
 ```
 
 ## Źródła I Odświeżanie

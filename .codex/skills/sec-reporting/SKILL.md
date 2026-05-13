@@ -1,6 +1,6 @@
 ---
 name: sec-reporting
-description: Reporting standard for local AppSec review. Use when you need to distinguish Findings, Observations, and Follow-up entries; prepare an evidence-based report; add Attack Variant, ASVS Mapping, Remediation, Regression Test, and Fix Prompt sections; and avoid implementing fixes during review.
+description: Reporting standard for local AppSec review. Use when you need to distinguish Findings, Observations, and Follow-up entries; prepare an evidence-based report; add Attack Variant, ASVS Mapping, Remediation, and Regression Test sections; and avoid implementing fixes during review.
 ---
 
 # sec-reporting
@@ -11,7 +11,9 @@ Tool output from `npm audit`, `dotnet package list --vulnerable`, `dotnet list p
 
 ## Report Language
 
-Write every final review report in Polish. Keep technical labels and field names in English when useful for portability, for example `Findings`, `Observations`, `Follow-up`, `Evidence`, `Attack Variant`, `Risk Path`, `ASVS Mapping`, `OWASP Top 10 Category`, and `Fix Prompt`, but write the report body, risk explanations, remediation text, regression-test guidance, observations, follow-ups, and fix prompts in Polish.
+Write every final review report in Polish. Use clear Polish prose for summaries, evidence explanations, risk paths, impact, remediation, regression-test guidance, observations, and follow-ups.
+
+Keep English only when it is a strong domain term without a reasonable Polish equivalent, an exact report field name, a standard, a vulnerability class, a library/tool name, a header/configuration/API name, or a code identifier. Avoid casual Polish-English mixing inside explanatory sentences. Prefer natural Polish words when they exist, for example evidence -> `dowód`, impact -> `wpływ`, risk path -> `ścieżka ryzyka`, remediation -> `zalecenie`, regression test -> `test regresyjny`, permission -> `uprawnienie`, owner -> `właściciel zasobu`. Keep concise technical terms when they improve precision, for example `XSS`, `SSRF`, `CSRF`, `IDOR/BOLA`, `JWT`, `OAuth/OIDC`, `claim`, `tenant`, `endpoint`, `cookie`, and `lockfile`.
 
 ## Result Types
 
@@ -24,6 +26,8 @@ Write every final review report in Polish. Keep technical labels and field names
 Every final report must include `Findings`, `Observations`, and `Follow-up` when those categories occur. If a category has no entries, state that explicitly, for example `Findings: brak potwierdzonych findingow`.
 
 Missing negative tests are supporting evidence, not a standalone finding, unless the implementation path also confirms the missing control.
+
+When the review prompt asks for persisted artifacts, save the exact prompt to `docs/appsec/{data_iso}_{aplikacja}-prompt.md` and the final report to `docs/appsec/{data_iso}_{aplikacja}.md`. Use a short repository, application, scope, or sweep slug for `{aplikacja}`.
 
 ## Required Finding Format
 
@@ -40,11 +44,6 @@ Each `Finding` contains:
 - Remediation,
 - Regression Test or validation,
 - `ASVS Mapping` or a rationale for no suitable mapping,
-- optional `OWASP Top 10 Category`,
-- `Fix Prompt` for a separate repair task.
-
-## Fix Prompt
-
-`Fix Prompt` must include the finding title, repair scope, locations, risk description, expected behavior after the fix, suggested Remediation, required Regression Test, and scope limits. The prompt must not include an implementation unless the user separately asks for the fix.
+- optional `OWASP Top 10 Category`.
 
 The report template is in `references/report-template.md`.
