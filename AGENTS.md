@@ -15,6 +15,8 @@ Każdy skill powinien trzymać główne instrukcje w `SKILL.md`, opcjonalną kon
 
 Repozytorium nie ma osobnego systemu budowania. Używaj ukierunkowanych sprawdzeń:
 
+Każdą komendę PowerShell uruchamiaj bez profilu użytkownika, zawsze przez `pwsh -NoLogo -NoProfile -NonInteractive -Command "..."`. W narzędziu `shell_command` każda komenda PowerShell musi mieć `login: false`, bo inaczej zewnętrzna powłoka może załadować profil użytkownika przed uruchomieniem wewnętrznego `pwsh -NoProfile`. Dzięki temu `oh-my-posh`, PSReadLine, moduły terminalowe i lokalne aliasy nie zanieczyszczają wyników komend ostrzeżeniami ani błędami niezwiązanymi z repozytorium.
+
 ```powershell
 pwsh -NoLogo -NoProfile -NonInteractive -Command "python .codex/skills/sec-asvs-review/scripts/asvs_lookup.py --level L2 --query authorization"
 pwsh -NoLogo -NoProfile -NonInteractive -Command "git diff --check"
@@ -34,10 +36,6 @@ Po zmianach w danych ASVS albo logice lookupu uruchom reprezentatywne zapytania 
 ## Commity I Pull Requesty
 
 Historia używa krótkich tematów commitów, np. `Fix prompts` oraz `Add security review references and reporting templates for AppSec assessments`. Temat commita powinien być zwięzły i wskazywać zmieniony skill albo obszar referencji. Pull request powinien opisywać zmienione skille, ewentualne aktualizacje datasetu ASVS, uruchomione komendy oraz wpływ na offline review.
-
-## PowerShell I Środowisko
-
-PowerShell uruchamiaj bez profilu użytkownika. W terminalu używaj `pwsh -NoLogo -NoProfile -NonInteractive -Command "git status"`. W narzędziu `shell_command` ustawiaj także `login: false`, bo inaczej zewnętrzna powłoka może załadować profil przed uruchomieniem wewnętrznego `pwsh -NoProfile`. Dzięki temu `oh-my-posh`, PSReadLine i lokalne aliasy nie zanieczyszczają wyników komend ostrzeżeniami ani błędami niezwiązanymi z repozytorium.
 
 ## Bezpieczeństwo I Konfiguracja
 
