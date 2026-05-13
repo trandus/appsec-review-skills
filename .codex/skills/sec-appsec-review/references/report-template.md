@@ -3,9 +3,9 @@
 ## Review Checks
 
 - Write the final report in Polish. Technical labels may stay in English, but summaries, evidence explanations, risk paths, impact, remediation, regression tests, observations, follow-ups, and fix prompts must be Polish.
-- Separate `Finding`, `Observation`, `Follow-up`, and `Out of Scope` instead of mixing confidence levels.
+- Separate `Findings`, `Observations`, `Follow-up`, and `Out of Scope` instead of mixing confidence levels. If a category has no entries, state that explicitly.
 - Report a `Finding` only when local code evidence or a traced missing control supports it.
-- Include `Location`, `Evidence`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, `ASVS Mapping` or a mapping rationale, and `Fix Prompt`.
+- Include `Location`, `Evidence`, `Attack Variant`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, `ASVS Mapping` or a mapping rationale, and `Fix Prompt`.
 - Record current-documentation, scanner, runtime, SaaS, cloud, and environment checks as `Follow-up` when they cannot be proven locally.
 - Keep source attribution short; source links live in repository-root `SEC-README.md`.
 
@@ -52,6 +52,7 @@ Briefly describe the most important risks, scope, and limitations. Do not claim 
 - Status: confirmed
 - Location:
 - Evidence:
+- Attack Variant:
 - Risk Path:
 - Impact:
 - Remediation:
@@ -70,7 +71,7 @@ Fix finding `<title>` within `<scope>`. Start from `<files/symbols>`. Risk: `<de
   - Why this is not a Finding:
   - Suggested Next Step:
 
-## Follow-ups
+## Follow-up
 
 - Follow-up:
   - Question or Validation:

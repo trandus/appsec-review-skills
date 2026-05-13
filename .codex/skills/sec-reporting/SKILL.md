@@ -1,6 +1,6 @@
 ---
 name: sec-reporting
-description: Reporting standard for local AppSec review. Use when you need to distinguish Finding, Observation, and Follow-up entries; prepare an evidence-based report; add ASVS Mapping, Remediation, Regression Test, and Fix Prompt sections; and avoid implementing fixes during review.
+description: Reporting standard for local AppSec review. Use when you need to distinguish Findings, Observations, and Follow-up entries; prepare an evidence-based report; add Attack Variant, ASVS Mapping, Remediation, Regression Test, and Fix Prompt sections; and avoid implementing fixes during review.
 ---
 
 # sec-reporting
@@ -11,13 +11,19 @@ Tool output from `npm audit`, `dotnet package list --vulnerable`, `dotnet list p
 
 ## Report Language
 
-Write every final review report in Polish. Keep technical labels and field names in English when useful for portability, for example `Finding`, `Observation`, `Follow-up`, `Evidence`, `Risk Path`, `ASVS Mapping`, `OWASP Top 10 Category`, and `Fix Prompt`, but write the report body, risk explanations, remediation text, regression-test guidance, observations, follow-ups, and fix prompts in Polish.
+Write every final review report in Polish. Keep technical labels and field names in English when useful for portability, for example `Findings`, `Observations`, `Follow-up`, `Evidence`, `Attack Variant`, `Risk Path`, `ASVS Mapping`, `OWASP Top 10 Category`, and `Fix Prompt`, but write the report body, risk explanations, remediation text, regression-test guidance, observations, follow-ups, and fix prompts in Polish.
 
 ## Result Types
 
 - **Finding**: a confirmed vulnerability or material risk with location, evidence, Risk Path, and Impact.
 - **Observation**: a design observation, weakened control, tool signal, or incomplete hypothesis without enough evidence for a finding.
 - **Follow-up**: a question, tool validation, need for current documentation, unavailable network/login/database/configuration, or separate check.
+
+## Required Report Sections
+
+Every final report must include `Findings`, `Observations`, and `Follow-up` when those categories occur. If a category has no entries, state that explicitly, for example `Findings: brak potwierdzonych findingow`.
+
+Missing negative tests are supporting evidence, not a standalone finding, unless the implementation path also confirms the missing control.
 
 ## Required Finding Format
 
@@ -28,6 +34,7 @@ Each `Finding` contains:
 - status,
 - location: file, line or narrowest practical range, symbol/route/configuration key,
 - evidence in code or a traced missing control,
+- Attack Variant, for example `authenticated-but-wrong-user`, `wrong-role`, `cross-tenant`, `bulk object access`, `stored XSS`, `reflected XSS`, `SQL injection`, `file-id swap`, or `replay`,
 - Risk Path,
 - Impact,
 - Remediation,

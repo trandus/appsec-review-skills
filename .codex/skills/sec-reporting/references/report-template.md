@@ -3,7 +3,7 @@
 ## Review Checks
 
 - Write the final report in Polish. Technical labels may stay in English, but summaries, evidence explanations, risk paths, impact, remediation, regression tests, observations, follow-ups, and fix prompts must be Polish.
-- Separate confirmed `Finding` entries from `Observation` and `Follow-up`.
+- Separate confirmed `Findings` entries from `Observations` and `Follow-up`. If a category has no entries, state that explicitly.
 - Require local evidence or a traced missing control for every finding.
 - Include remediation and a `Fix Prompt` without implementing the fix.
 - Use ASVS mapping when a suitable local requirement exists; explain when no good mapping applies.
@@ -30,7 +30,9 @@
 - The report is not a penetration test, full ASVS certification, legal assessment, or runtime assurance.
 - If local references are insufficient for a framework, SDK, CLI, cloud service, or tool, write a `Follow-up` and continue with locally reviewable evidence.
 
-## Finding
+## Findings
+
+### Finding: <title>
 
 - Title:
 - Severity:
@@ -38,6 +40,7 @@
 - Status:
 - Location:
 - Code Evidence:
+- Attack Variant:
 - Risk Path:
 - Impact:
 - Remediation:
@@ -46,7 +49,9 @@
 - OWASP Top 10 Category:
 - Fix Prompt:
 
-## Observation
+## Observations
+
+### Observation
 
 - Description:
 - Partial Evidence:
@@ -55,6 +60,8 @@
 - Next Step:
 
 ## Follow-up
+
+### Follow-up
 
 - Question / Validation:
 - Context:
