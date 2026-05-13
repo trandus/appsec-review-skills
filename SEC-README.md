@@ -26,7 +26,7 @@ Wyniki narzędzi mogą być przekazane ręcznie albo użyte lokalnie na wyraźne
 
 ## ASVS Lookup Offline
 
-`sec-asvs-review` ma lokalny dataset `references/asvs-5.0.0-local.json` i helper:
+`sec-asvs-review` ma lokalny, kuratorowany dataset `references/asvs-5.0.0-local.json` i helper. Dataset zawiera tylko mapowania ASVS 5.0.0 używane przez obecne skille, prompty i referencje: bazowe web/API ryzyka oraz najważniejsze ścieżki auth/authz, API, danych, konfiguracji, supply chain i logowania. Nie jest pełną kopią ASVS, nie zawiera całego L1 i nie służy do deklarowania certyfikacji ASVS.
 
 ```powershell
 python .codex/skills/sec-asvs-review/scripts/asvs_lookup.py --level L2 --query authorization
@@ -218,16 +218,18 @@ Zapisz raport w `docs/appsec/{data_iso}_{aplikacja}.md`.
 
 ## Źródła I Odświeżanie
 
-Referencje skilli są po angielsku i mają sekcje `Sources`. Powstały jako krótkie lokalne opracowanie na podstawie oficjalnych albo uznanych materiałów: OWASP ASVS 5.0.0, OWASP WSTG stable, OWASP Web Top 10:2021, OWASP API Security Top 10:2023, Microsoft Learn dla ASP.NET Core security i NuGet audit, Angular security docs, npm CLI `npm audit`, CodeQL docs i Semgrep docs.
+Referencje skilli są po angielsku i mają sekcje `Sources`. Powstały jako krótkie lokalne opracowanie na podstawie oficjalnych albo uznanych materiałów: OWASP ASVS 5.0.0, OWASP WSTG stable, OWASP Web Top 10:2021, OWASP API Security Top 10:2023, Microsoft Learn dla ASP.NET Core security i NuGet audit, Angular security docs, npm CLI `npm audit`, CodeQL docs i Semgrep docs. Lokalny dataset ASVS został odświeżony z oficjalnego OWASP ASVS 5.0.0 release asset `OWASP_Application_Security_Verification_Standard_5.0.0_en.flat.json`, ale zawiera tylko mapowania używane przez aktualne skille. Niewykorzystywane wymagania nie są trzymane lokalnie. Publiczne repo `OdellMoreno/asvs-security-review-skill` było traktowane jako inspiracja procesu lookup, nie jako kopiowane źródło danych.
 
 Linki źródłowe do odświeżania referencji:
 
 | Obszar | Źródło |
 | --- | --- |
 | OWASP ASVS | https://owasp.org/www-project-application-security-verification-standard/ |
+| OWASP ASVS releases | https://github.com/OWASP/ASVS/releases |
 | OWASP Web Top 10:2021 | https://owasp.org/Top10/2021/ |
 | OWASP API Security Top 10:2023 | https://owasp.org/API-Security/editions/2023/en/0x11-t10/ |
 | OWASP WSTG stable | https://owasp.org/www-project-web-security-testing-guide/stable/ |
+| asvs-security-review-skill inspiration | https://github.com/OdellMoreno/asvs-security-review-skill |
 | Microsoft Learn ASP.NET Core security | https://learn.microsoft.com/en-us/aspnet/core/security/ |
 | Angular security | https://angular.dev/best-practices/security |
 | npm audit | https://docs.npmjs.com/cli/v11/commands/npm-audit/ |

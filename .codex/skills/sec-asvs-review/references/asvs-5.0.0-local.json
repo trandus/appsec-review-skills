@@ -3,127 +3,548 @@
   "version": "5.0.0",
   "license": "CC-BY-SA-4.0",
   "identifier_format": "v5.0.0-<id>",
-  "note": "Focused offline dataset for local ASVS lookup; not a complete copy of ASVS.",
+  "note": "Focused offline dataset for local ASVS lookup. It contains only mappings currently used by the sec-* review flow; it is not a complete copy of ASVS, not all L1, and not a certification dataset.",
+  "selection": {
+    "basis": "Official OWASP ASVS 5.0.0 release asset OWASP_Application_Security_Verification_Standard_5.0.0_en.flat.json downloaded during reference refresh.",
+    "included": "Compact mappings for current sec-* prompts and references: exploitable web/API paths, authentication, session and token handling, authorization, API object/property/function checks, input/data handling, files, SSRF, configuration, data protection, logging, supply chain, mass assignment, resource consumption, and abuse resistance.",
+    "excluded": "Requirements not currently used by the review prompts or local references. Add new ASVS entries only when a skill, reference, or prompt needs that mapping."
+  },
   "requirements": [
+    {
+      "id": "1.2.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Encoding and Sanitization",
+      "area": "Injection Prevention",
+      "keywords": ["injection", "xml", "encoding", "sanitization", "prevention", "output", "http", "response", "html", "document", "relevant", "context", "characters", "elements"],
+      "summary": "Check whether output encoding for an HTTP response, HTML document, or XML document is relevant for the context required, such as encoding the relevant characters for HTML elements, HTML attributes, HTML comments, CSS, or HTTP header fields, to avoid changing."
+    },
+    {
+      "id": "1.2.2",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Encoding and Sanitization",
+      "area": "Injection Prevention",
+      "keywords": ["injection", "path", "encoding", "sanitization", "prevention", "dynamically", "building", "urls", "untrusted", "encoded", "according", "context", "base64url", "query"],
+      "summary": "Check whether when dynamically building URLs, untrusted data is encoded according to its context (e.g., URL encoding or base64url encoding for query or path parameters). Ensure that only safe URL protocols are permitted (e.g., disallow javascript: or data:)."
+    },
+    {
+      "id": "1.2.3",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Encoding and Sanitization",
+      "area": "Injection Prevention",
+      "keywords": ["injection", "encoding", "sanitization", "prevention", "output", "escaping", "dynamically", "building", "javascript", "content", "json", "avoid", "changing", "message"],
+      "summary": "Check whether output encoding or escaping is used when dynamically building JavaScript content (including JSON), to avoid changing the message or document structure (to avoid JavaScript and JSON injection)."
+    },
+    {
+      "id": "1.2.4",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Encoding and Sanitization",
+      "area": "Injection Prevention",
+      "keywords": ["injection", "sql", "nosql", "sql injection", "nosql injection", "parameterized query", "orm", "encoding", "sanitization", "prevention", "selection", "database", "queries", "cypher"],
+      "summary": "Check whether data selection or database queries (e.g., SQL, HQL, NoSQL, Cypher) use parameterized queries, ORMs, entity frameworks, or are otherwise protected from SQL Injection and other database injection attacks. This is also relevant when writing stored."
+    },
     {
       "id": "1.2.5",
       "levels": ["L1", "L2", "L3"],
       "chapter": "Encoding and Sanitization",
       "area": "Injection Prevention",
-      "keywords": ["command injection", "os command", "shell", "injection"],
-      "summary": "Check whether the application protects against OS command injection and avoids building system commands from untrusted input."
+      "keywords": ["injection", "encoding", "sanitization", "prevention", "protects", "command", "operating", "system", "calls", "parameterized", "queries", "contextual", "line", "output"],
+      "summary": "Check whether the application protects against OS command injection and that operating system calls use parameterized OS queries or use contextual command line output encoding."
+    },
+    {
+      "id": "1.3.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Encoding and Sanitization",
+      "area": "Sanitization",
+      "keywords": ["secure", "encoding", "sanitization", "untrusted", "html", "input", "wysiwyg", "editors", "similar", "sanitized", "well-known", "library", "framework", "feature"],
+      "summary": "Check whether all untrusted HTML input from WYSIWYG editors or similar is sanitized using a well-known and secure HTML sanitization library or framework feature."
+    },
+    {
+      "id": "1.3.2",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Encoding and Sanitization",
+      "area": "Sanitization",
+      "keywords": ["encoding", "sanitization", "avoids", "eval", "other", "dynamic", "code", "execution", "features", "spring", "expression", "language", "spel", "alternative"],
+      "summary": "Check whether the application avoids the use of eval() or other dynamic code execution features such as Spring Expression Language (SpEL). Where there is no alternative, any user input being included must be sanitized before being executed."
+    },
+    {
+      "id": "1.3.6",
+      "levels": ["L2", "L3"],
+      "chapter": "Encoding and Sanitization",
+      "area": "Sanitization",
+      "keywords": ["ssrf", "path", "outbound request", "url allowlist", "metadata", "webhook", "encoding", "sanitization", "protects", "server-side", "request", "forgery", "attacks", "validating"],
+      "summary": "Check whether the application protects against Server-side Request Forgery (SSRF) attacks, by validating untrusted data against an allowlist of protocols, domains, paths and ports and sanitizing potentially dangerous characters before using the data to call."
     },
     {
       "id": "1.5.1",
       "levels": ["L1", "L2", "L3"],
       "chapter": "Encoding and Sanitization",
-      "area": "Output Encoding",
-      "keywords": ["xss", "encoding", "html", "javascript", "template"],
-      "summary": "Check whether output is encoded or sanitized for the target context."
+      "area": "Safe Deserialization",
+      "keywords": ["xml", "xxe", "deserialization", "xml external entity", "xml parser", "encoding", "sanitization", "safe", "configures", "parsers", "restrictive", "configuration", "unsafe", "features"],
+      "summary": "Check whether the application configures XML parsers to use a restrictive configuration and that unsafe features such as resolving external entities are disabled to prevent XML eXternal Entity (XXE) attacks."
     },
     {
-      "id": "2.1.1",
+      "id": "1.5.2",
+      "levels": ["L2", "L3"],
+      "chapter": "Encoding and Sanitization",
+      "area": "Safe Deserialization",
+      "keywords": ["deserialization", "secure", "object injection", "allowlist", "encoding", "sanitization", "safe", "untrusted", "enforces", "input", "handling", "object", "types", "restricting"],
+      "summary": "Check whether deserialization of untrusted data enforces safe input handling, such as using an allowlist of object types or restricting client-defined object types, to prevent deserialization attacks. Deserialization mechanisms that are explicitly defined as."
+    },
+    {
+      "id": "2.2.1",
       "levels": ["L1", "L2", "L3"],
       "chapter": "Validation and Business Logic",
       "area": "Input Validation",
-      "keywords": ["validation", "input", "model binding", "business logic"],
-      "summary": "Check whether input is validated on the trusted side of the boundary before use."
+      "keywords": ["limit", "business", "logic", "validation", "input", "validated", "enforce", "functional", "expectations", "either", "positive", "allow", "list", "values"],
+      "summary": "Check whether input is validated to enforce business or functional expectations for that input. This should either use positive validation against an allow list of values, patterns, and ranges, or be based on comparing the input to an expected structure and."
+    },
+    {
+      "id": "2.2.2",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Validation and Business Logic",
+      "area": "Input Validation",
+      "keywords": ["business", "logic", "validation", "input", "designed", "enforce", "trusted", "service", "layer", "while", "client-side", "improves", "usability", "encouraged"],
+      "summary": "Check whether the application is designed to enforce input validation at a trusted service layer. While client-side validation improves usability and should be encouraged, it must not be relied upon as a security control."
+    },
+    {
+      "id": "2.3.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Validation and Business Logic",
+      "area": "Business Logic Security",
+      "keywords": ["business", "logic", "business logic", "workflow", "step order", "validation", "will", "process", "flows", "same", "sequential", "step", "order", "skipping"],
+      "summary": "Check whether the application will only process business logic flows for the same user in the expected sequential step order and without skipping steps."
+    },
+    {
+      "id": "2.3.3",
+      "levels": ["L2", "L3"],
+      "chapter": "Validation and Business Logic",
+      "area": "Business Logic Security",
+      "keywords": ["business", "logic", "validation", "transactions", "level", "either", "operation", "succeeds", "entirety", "rolled", "back", "previous", "correct", "state"],
+      "summary": "Check whether transactions are being used at the business logic level such that either a business logic operation succeeds in its entirety or it is rolled back to the previous correct state."
+    },
+    {
+      "id": "2.3.4",
+      "levels": ["L2", "L3"],
+      "chapter": "Validation and Business Logic",
+      "area": "Business Logic Security",
+      "keywords": ["limit", "business", "logic", "validation", "level", "locking", "mechanisms", "limited", "quantity", "resources", "theater", "seats", "delivery", "slots"],
+      "summary": "Check whether business logic level locking mechanisms are used to ensure that limited quantity resources (such as theater seats or delivery slots) cannot be double-booked by manipulating the application's logic."
+    },
+    {
+      "id": "2.4.1",
+      "levels": ["L2", "L3"],
+      "chapter": "Validation and Business Logic",
+      "area": "Anti-automation",
+      "keywords": ["rate", "limit", "quota", "business", "logic", "anti-automation", "anti automation", "rate limit", "enumeration", "scraping", "validation", "place", "protect", "excessive"],
+      "summary": "Check whether anti-automation controls are in place to protect against excessive calls to application functions that could lead to data exfiltration, garbage-data creation, quota exhaustion, rate-limit breaches, denial-of-service, or overuse of costly."
     },
     {
       "id": "3.2.1",
       "levels": ["L1", "L2", "L3"],
       "chapter": "Web Frontend Security",
-      "area": "Browser Security",
-      "keywords": ["dom", "frontend", "xss", "sanitizer", "csp"],
-      "summary": "Check whether the frontend limits dangerous DOM operations and avoids bypassing sanitization without a trusted source."
+      "area": "Unintended Content Interpretation",
+      "keywords": ["file", "upload", "frontend", "unintended", "content", "interpretation", "place", "browsers", "rendering", "functionality", "http", "responses", "incorrect", "context"],
+      "summary": "Check whether security controls are in place to prevent browsers from rendering content or functionality in HTTP responses in an incorrect context (e.g., when an API, a user-uploaded file or other resource is requested directly). Possible controls could."
     },
     {
       "id": "4.1.1",
       "levels": ["L1", "L2", "L3"],
       "chapter": "API and Web Service",
-      "area": "Endpoint Protection",
-      "keywords": ["api", "endpoint", "route", "controller", "webhook"],
-      "summary": "Check whether API endpoints enforce appropriate access control, validation, and data limits."
+      "area": "Generic Web Service Security",
+      "keywords": ["xml", "service", "generic", "every", "http", "response", "message", "body", "contains", "content-type", "header", "field", "matches", "actual"],
+      "summary": "Check whether every HTTP response with a message body contains a Content-Type header field that matches the actual content of the response, including the charset parameter to specify safe character encoding (e.g., UTF-8, ISO-8859-1) according to IANA Media."
     },
     {
-      "id": "5.1.1",
+      "id": "4.1.3",
+      "levels": ["L2", "L3"],
+      "chapter": "API and Web Service",
+      "area": "Generic Web Service Security",
+      "keywords": ["proxy", "headers", "service", "generic", "http", "header", "field", "intermediary", "layer", "load", "balancer", "backend-for-frontend", "cannot", "overridden"],
+      "summary": "Check whether any HTTP header field used by the application and set by an intermediary layer, such as a load balancer, a web proxy, or a backend-for-frontend service, cannot be overridden by the end-user. Example headers might include X-Real-IP."
+    },
+    {
+      "id": "4.2.1",
+      "levels": ["L2", "L3"],
+      "chapter": "API and Web Service",
+      "area": "HTTP Message Structure Validation",
+      "keywords": ["http request smuggling", "http message", "load balancer", "proxy", "service", "http", "message", "structure", "validation", "components", "load", "balancers", "firewalls", "servers"],
+      "summary": "Check whether all application components (including load balancers, firewalls, and application servers) determine boundaries of incoming HTTP messages using the appropriate mechanism for the HTTP version to prevent HTTP request smuggling. In HTTP/1.x, if a."
+    },
+    {
+      "id": "4.3.1",
+      "levels": ["L2", "L3"],
+      "chapter": "API and Web Service",
+      "area": "GraphQL",
+      "keywords": ["graphql", "limit", "query depth", "query cost", "dos", "service", "query", "allowlist", "depth", "limiting", "amount", "cost", "analysis", "layer"],
+      "summary": "Check whether a query allowlist, depth limiting, amount limiting, or query cost analysis is used to prevent GraphQL or data layer expression Denial of Service (DoS) as a result of expensive, nested queries."
+    },
+    {
+      "id": "4.3.2",
+      "levels": ["L2", "L3"],
+      "chapter": "API and Web Service",
+      "area": "GraphQL",
+      "keywords": ["graphql", "service", "introspection", "queries", "disabled", "production", "environment", "unless", "meant", "other", "parties"],
+      "summary": "Check whether GraphQL introspection queries are disabled in the production environment unless the GraphQL API is meant to be used by other parties."
+    },
+    {
+      "id": "4.4.2",
+      "levels": ["L2", "L3"],
+      "chapter": "API and Web Service",
+      "area": "WebSocket",
+      "keywords": ["websocket", "service", "during", "initial", "http", "handshake", "origin", "header", "field", "checked", "list", "origins", "allowed"],
+      "summary": "Check that, during the initial HTTP WebSocket handshake, the Origin header field is checked against a list of origins allowed for the application."
+    },
+    {
+      "id": "4.4.3",
+      "levels": ["L2", "L3"],
+      "chapter": "API and Web Service",
+      "area": "WebSocket",
+      "keywords": ["session", "token", "websocket", "service", "standard", "management", "cannot", "dedicated", "tokens", "which", "comply", "relevant", "requirements"],
+      "summary": "Check that, if the application's standard session management cannot be used, dedicated tokens are being used for this, which comply with the relevant Session Management security requirements."
+    },
+    {
+      "id": "5.2.1",
       "levels": ["L1", "L2", "L3"],
       "chapter": "File Handling",
-      "area": "Upload and Download",
-      "keywords": ["file", "upload", "download", "path traversal", "blob"],
-      "summary": "Check whether file operations constrain type, size, paths, access, and data disclosure."
+      "area": "File Upload and Content",
+      "keywords": ["file", "upload", "handling", "content", "will", "accept", "files", "size", "which", "process", "causing", "loss", "performance", "denial"],
+      "summary": "Check whether the application will only accept files of a size which it can process without causing a loss of performance or a denial of service attack."
+    },
+    {
+      "id": "5.2.2",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "File Handling",
+      "area": "File Upload and Content",
+      "keywords": ["file", "upload", "limit", "business", "handling", "content", "accepts", "either", "archive", "checks", "extension", "matches", "validates", "contents"],
+      "summary": "Check whether when the application accepts a file, either on its own or within an archive such as a zip file, it checks if the file extension matches an expected file extension and validates that the contents correspond to the type represented by the."
+    },
+    {
+      "id": "5.3.2",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "File Handling",
+      "area": "File Storage",
+      "keywords": ["ssrf", "file", "path", "traversal", "rate", "metadata", "handling", "storage", "creates", "paths", "operations", "instead", "user-submitted", "filenames"],
+      "summary": "Check whether when the application creates file paths for file operations, instead of user-submitted filenames, it uses internally generated or trusted data, or if user-submitted filenames or file metadata must be used, strict validation and sanitization must."
     },
     {
       "id": "6.1.1",
       "levels": ["L1", "L2", "L3"],
       "chapter": "Authentication",
-      "area": "Authentication Controls",
-      "keywords": ["authentication", "login", "session", "token", "credential"],
-      "summary": "Check whether authentication is enforced server-side and resists common abuse paths."
+      "area": "Authentication Documentation",
+      "keywords": ["authentication", "password", "rate", "limit", "anti-automation", "documentation", "defines", "limiting", "adaptive", "response", "defend", "attacks", "credential", "stuffing"],
+      "summary": "Check whether application documentation defines how controls such as rate limiting, anti-automation, and adaptive response, are used to defend against attacks such as credential stuffing and password brute force. The documentation must make clear how these."
     },
     {
-      "id": "7.1.1",
+      "id": "6.4.3",
+      "levels": ["L2", "L3"],
+      "chapter": "Authentication",
+      "area": "Authentication Factor Lifecycle and Recovery",
+      "keywords": ["authentication", "secure", "password", "reset", "password reset", "account recovery", "mfa bypass", "factor", "lifecycle", "recovery", "process", "resetting", "forgotten", "does"],
+      "summary": "Check whether a secure process for resetting a forgotten password is implemented, that does not bypass any enabled multi-factor authentication mechanisms."
+    },
+    {
+      "id": "6.5.1",
+      "levels": ["L2", "L3"],
+      "chapter": "Authentication",
+      "area": "General Multi-factor authentication requirements",
+      "keywords": ["authentication", "password", "secret", "general", "multi-factor", "requirements", "lookup", "secrets", "out-of-band", "requests", "codes", "time-based", "one-time", "passwords"],
+      "summary": "Check whether lookup secrets, out-of-band authentication requests or codes, and time-based one-time passwords (TOTPs) are only successfully usable once."
+    },
+    {
+      "id": "6.6.2",
+      "levels": ["L2", "L3"],
+      "chapter": "Authentication",
+      "area": "Out-of-Band authentication mechanisms",
+      "keywords": ["authentication", "token", "rate", "out-of-band", "mechanisms", "requests", "codes", "tokens", "bound", "original", "request", "which", "they", "were"],
+      "summary": "Check whether out-of-band authentication requests, codes, or tokens are bound to the original authentication request for which they were generated and are not usable for a previous or subsequent one."
+    },
+    {
+      "id": "7.2.1",
       "levels": ["L1", "L2", "L3"],
       "chapter": "Session Management",
-      "area": "Session Controls",
-      "keywords": ["session", "cookie", "csrf", "sameSite", "logout"],
-      "summary": "Check whether sessions and cookies have secure attributes, safe lifecycle handling, and abuse protection."
+      "area": "Fundamental Session Management Security",
+      "keywords": ["session", "token", "management", "fundamental", "performs", "verification", "trusted", "backend", "service"],
+      "summary": "Check whether the application performs all session token verification using a trusted, backend service."
+    },
+    {
+      "id": "7.3.1",
+      "levels": ["L2", "L3"],
+      "chapter": "Session Management",
+      "area": "Session Timeout",
+      "keywords": ["authentication", "session", "management", "timeout", "inactivity", "re-authentication", "enforced", "according", "risk", "analysis", "decisions"],
+      "summary": "Check whether there is an inactivity timeout such that re-authentication is enforced according to risk analysis and documented security decisions."
+    },
+    {
+      "id": "7.3.2",
+      "levels": ["L2", "L3"],
+      "chapter": "Session Management",
+      "area": "Session Timeout",
+      "keywords": ["authentication", "session", "management", "timeout", "absolute", "maximum", "lifetime", "re-authentication", "enforced", "according", "risk", "analysis", "decisions"],
+      "summary": "Check whether there is an absolute maximum session lifetime such that re-authentication is enforced according to risk analysis and documented security decisions."
+    },
+    {
+      "id": "7.4.3",
+      "levels": ["L2", "L3"],
+      "chapter": "Session Management",
+      "area": "Session Termination",
+      "keywords": ["authentication", "session", "mfa", "password", "reset", "management", "termination", "gives", "option", "terminate", "other", "active", "sessions", "successful"],
+      "summary": "Check whether the application gives the option to terminate all other active sessions after a successful change or removal of any authentication factor (including password change via reset or recovery and, if present, an MFA settings update)."
+    },
+    {
+      "id": "7.5.1",
+      "levels": ["L2", "L3"],
+      "chapter": "Session Management",
+      "area": "Defenses Against Session Abuse",
+      "keywords": ["authentication", "session", "mfa", "reauthentication", "sensitive account change", "mfa change", "management", "defenses", "abuse", "full", "re-authentication", "allowing", "modifications", "sensitive"],
+      "summary": "Check whether the application requires full re-authentication before allowing modifications to sensitive account attributes which may affect authentication such as email address, phone number, MFA configuration, or other information used in account recovery."
     },
     {
       "id": "8.1.1",
       "levels": ["L1", "L2", "L3"],
       "chapter": "Authorization",
-      "area": "Access Control",
-      "keywords": ["authorization", "access control", "idor", "bola", "ownership", "tenant"],
-      "summary": "Check whether every operation enforces function-level and object-level authorization."
+      "area": "Authorization Documentation",
+      "keywords": ["authorization", "permission", "documentation", "defines", "rules", "restricting", "function-level", "data-specific", "access", "consumer", "permissions", "resource", "attributes"],
+      "summary": "Check whether authorization documentation defines rules for restricting function-level and data-specific access based on consumer permissions and resource attributes."
+    },
+    {
+      "id": "8.2.3",
+      "levels": ["L2", "L3"],
+      "chapter": "Authorization",
+      "area": "General Authorization Design",
+      "keywords": ["authorization", "permission", "bopla", "field level", "mass assignment", "excessive data exposure", "general", "design", "field-level", "access", "restricted", "consumers", "explicit", "permissions"],
+      "summary": "Check whether the application ensures that field-level access is restricted to consumers with explicit permissions to specific fields to mitigate broken object property level authorization (BOPLA)."
+    },
+    {
+      "id": "8.4.1",
+      "levels": ["L2", "L3"],
+      "chapter": "Authorization",
+      "area": "Other Authorization Considerations",
+      "keywords": ["authorization", "tenant", "permission", "cross tenant", "multi tenant", "other", "considerations", "multi-tenant", "cross-tenant", "consumer", "operations", "will", "never", "affect"],
+      "summary": "Check whether multi-tenant applications use cross-tenant controls to ensure consumer operations will never affect tenants with which they do not have permissions to interact."
     },
     {
       "id": "9.1.1",
       "levels": ["L1", "L2", "L3"],
-      "chapter": "Data Protection",
-      "area": "Sensitive Data",
-      "keywords": ["sensitive data", "pii", "privacy", "secret", "token", "payment"],
-      "summary": "Check whether sensitive data is minimized, protected in flows, and kept out of unauthorized locations."
+      "chapter": "Self-contained Tokens",
+      "area": "Token source and integrity",
+      "keywords": ["token", "self-contained", "tokens", "source", "integrity", "validated", "digital", "signature", "protect", "tampering", "accepting", "contents"],
+      "summary": "Check whether self-contained tokens are validated using their digital signature or MAC to protect against tampering before accepting the token's contents."
     },
     {
-      "id": "10.1.1",
-      "levels": ["L1", "L2", "L3"],
-      "chapter": "Cryptography",
-      "area": "Cryptographic Controls",
-      "keywords": ["crypto", "encryption", "hash", "random", "key"],
-      "summary": "Check whether cryptography uses proven mechanisms, avoids custom algorithms, and protects keys appropriately."
-    },
-    {
-      "id": "11.1.1",
+      "id": "9.2.2",
       "levels": ["L2", "L3"],
-      "chapter": "Business Logic",
-      "area": "Abuse Resistance",
-      "keywords": ["abuse", "rate limit", "replay", "automation", "business logic"],
-      "summary": "Check whether costly, repeatable, or sensitive actions have abuse controls and business-rule validation."
+      "chapter": "Self-contained Tokens",
+      "area": "Token content",
+      "keywords": ["authorization", "authentication", "token", "self-contained", "tokens", "content", "service", "receiving", "validates", "correct", "type", "meant", "intended", "purpose"],
+      "summary": "Check whether the service receiving a token validates the token to be the correct type and is meant for the intended purpose before accepting the token's contents. For example, only access tokens can be accepted for authorization decisions and only ID Tokens."
     },
     {
-      "id": "12.1.1",
-      "levels": ["L1", "L2", "L3"],
-      "chapter": "Secure Configuration",
-      "area": "Configuration",
-      "keywords": ["configuration", "secret", "cors", "debug", "headers"],
-      "summary": "Check whether configuration avoids secret exposure and unsafe settings in the target environment."
+      "id": "9.2.3",
+      "levels": ["L2", "L3"],
+      "chapter": "Self-contained Tokens",
+      "area": "Token content",
+      "keywords": ["token", "jwt", "audience", "aud", "token validation", "self-contained", "tokens", "content", "service", "accepts", "which", "intended", "jwts", "achieved"],
+      "summary": "Check whether the service only accepts tokens which are intended for use with that service (audience). For JWTs, this can be achieved by validating the 'aud' claim against an allowlist defined in the service."
     },
     {
-      "id": "13.1.1",
-      "levels": ["L1", "L2", "L3"],
-      "chapter": "Logging and Error Handling",
-      "area": "Logging",
-      "keywords": ["logging", "monitoring", "audit", "error", "pii"],
-      "summary": "Check whether security events are logged and logs or errors avoid disclosing sensitive data."
+      "id": "9.2.4",
+      "levels": ["L2", "L3"],
+      "chapter": "Self-contained Tokens",
+      "area": "Token content",
+      "keywords": ["token", "key", "self-contained", "tokens", "content", "issuer", "same", "private", "issuing", "different", "audiences", "issued", "contain", "audience"],
+      "summary": "Check that, if a token issuer uses the same private key for issuing tokens to different audiences, the issued tokens contain an audience restriction that uniquely identifies the intended audiences. This will prevent a token from being reused with an."
     },
     {
-      "id": "14.1.1",
+      "id": "10.4.1",
       "levels": ["L1", "L2", "L3"],
-      "chapter": "Supply Chain",
-      "area": "Dependencies",
-      "keywords": ["dependency", "package", "nuget", "npm", "supply chain", "lockfile"],
-      "summary": "Check whether dependencies and supply chain inputs are controlled, versioned, and reviewed for known risks."
+      "chapter": "OAuth and OIDC",
+      "area": "OAuth Authorization Server",
+      "keywords": ["authorization", "oauth", "oidc", "redirect", "server", "validates", "uris", "client-specific", "allowlist", "pre-registered", "exact", "string", "comparison"],
+      "summary": "Check whether the authorization server validates redirect URIs based on a client-specific allowlist of pre-registered URIs using exact string comparison."
+    },
+    {
+      "id": "10.4.2",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "OAuth and OIDC",
+      "area": "OAuth Authorization Server",
+      "keywords": ["authorization", "token", "oauth", "oidc", "server", "returns", "code", "response", "once", "request", "second", "valid", "already", "been"],
+      "summary": "Check that, if the authorization server returns the authorization code in the authorization response, it can be used only once for a token request. For the second valid request with an authorization code that has already been used to issue an access token."
+    },
+    {
+      "id": "10.5.4",
+      "levels": ["L2", "L3"],
+      "chapter": "OAuth and OIDC",
+      "area": "OIDC Client",
+      "keywords": ["token", "oauth", "oidc", "client", "validates", "intended", "audience", "checking", "claim", "equal", "value"],
+      "summary": "Check whether the client validates that the ID Token is intended to be used for that client (audience) by checking that the 'aud' claim from the token is equal to the 'client_id' value for the client."
+    },
+    {
+      "id": "13.2.4",
+      "levels": ["L2", "L3"],
+      "chapter": "Configuration",
+      "area": "Backend Communication Configuration",
+      "keywords": ["file", "ssrf", "outbound allowlist", "external resource", "url", "configuration", "backend", "communication", "allowlist", "define", "external", "resources", "systems", "which"],
+      "summary": "Check whether an allowlist is used to define the external resources or systems with which the application is permitted to communicate (e.g., for outbound requests, data loads, or file access). This allowlist can be implemented at the application layer, web."
+    },
+    {
+      "id": "13.3.1",
+      "levels": ["L2", "L3"],
+      "chapter": "Configuration",
+      "area": "Secret Management",
+      "keywords": ["token", "secure", "password", "secret", "key", "key vault", "credential", "configuration", "management", "secrets", "solution", "vault", "securely", "create"],
+      "summary": "Check whether a secrets management solution, such as a key vault, is used to securely create, store, control access to, and destroy backend secrets. These could include passwords, key material, integrations with databases and third-party systems, keys and."
+    },
+    {
+      "id": "13.4.2",
+      "levels": ["L2", "L3"],
+      "chapter": "Configuration",
+      "area": "Unintended Information Leakage",
+      "keywords": ["configuration", "unintended", "information", "leakage", "debug", "modes", "disabled", "components", "production", "environments", "exposure", "debugging", "features"],
+      "summary": "Check whether debug modes are disabled for all components in production environments to prevent exposure of debugging features and information leakage."
+    },
+    {
+      "id": "13.4.5",
+      "levels": ["L2", "L3"],
+      "chapter": "Configuration",
+      "area": "Unintended Information Leakage",
+      "keywords": ["configuration", "unintended", "information", "leakage", "documentation", "internal", "apis", "monitoring", "endpoints", "exposed", "unless", "explicitly", "intended"],
+      "summary": "Check whether documentation (such as for internal APIs) and monitoring endpoints are not exposed unless explicitly intended."
+    },
+    {
+      "id": "14.3.2",
+      "levels": ["L2", "L3"],
+      "chapter": "Data Protection",
+      "area": "Client-side Data Protection",
+      "keywords": ["cache", "protection", "client-side", "sets", "sufficient", "anti-caching", "http", "response", "header", "fields", "cache-control", "no-store", "sensitive", "cached"],
+      "summary": "Check whether the application sets sufficient anti-caching HTTP response header fields (i.e., Cache-Control: no-store) so that sensitive data is not cached in browsers."
+    },
+    {
+      "id": "14.3.3",
+      "levels": ["L2", "L3"],
+      "chapter": "Data Protection",
+      "area": "Client-side Data Protection",
+      "keywords": ["session", "token", "cookie", "protection", "client-side", "stored", "browser", "storage", "localstorage", "sessionstorage", "indexeddb", "cookies", "does", "contain"],
+      "summary": "Check whether data stored in browser storage (such as localStorage, sessionStorage, IndexedDB, or cookies) does not contain sensitive data, with the exception of session tokens."
+    },
+    {
+      "id": "15.1.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Secure Coding and Architecture",
+      "area": "Secure Coding and Architecture Documentation",
+      "keywords": ["secure", "coding", "architecture", "documentation", "defines", "risk", "remediation", "time", "frames", "party", "component", "versions", "vulnerabilities", "updating"],
+      "summary": "Check whether application documentation defines risk based remediation time frames for 3rd party component versions with vulnerabilities and for updating libraries in general, to minimize the risk from these components."
+    },
+    {
+      "id": "15.1.2",
+      "levels": ["L2", "L3"],
+      "chapter": "Secure Coding and Architecture",
+      "area": "Secure Coding and Architecture Documentation",
+      "keywords": ["secure", "sbom", "dependency", "supply chain", "trusted source", "coding", "architecture", "documentation", "inventory", "catalog", "software", "bill", "materials", "maintained"],
+      "summary": "Check whether an inventory catalog, such as software bill of materials (SBOM), is maintained of all third-party libraries in use, including verifying that components come from pre-defined, trusted, and continually maintained repositories."
+    },
+    {
+      "id": "15.2.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Secure Coding and Architecture",
+      "area": "Security Architecture and Dependencies",
+      "keywords": ["secure", "coding", "architecture", "dependencies", "contains", "components", "which", "breached", "update", "remediation", "time", "frames"],
+      "summary": "Check whether the application only contains components which have not breached the documented update and remediation time frames."
+    },
+    {
+      "id": "15.2.2",
+      "levels": ["L2", "L3"],
+      "chapter": "Secure Coding and Architecture",
+      "area": "Security Architecture and Dependencies",
+      "keywords": ["secure", "rate", "resource consumption", "availability", "dos", "coding", "architecture", "dependencies", "defenses", "loss", "functionality", "which", "time-consuming", "resource-demanding"],
+      "summary": "Check whether the application has implemented defenses against loss of availability due to functionality which is time-consuming or resource-demanding, based on the documented security decisions and strategies for this."
+    },
+    {
+      "id": "15.3.1",
+      "levels": ["L1", "L2", "L3"],
+      "chapter": "Secure Coding and Architecture",
+      "area": "Defensive Coding",
+      "keywords": ["secure", "coding", "architecture", "defensive", "returns", "subset", "fields", "object", "return", "entire", "some", "individual", "accessible"],
+      "summary": "Check whether the application only returns the required subset of fields from a data object. For example, it should not return an entire data object, as some individual fields should not be accessible to users."
+    },
+    {
+      "id": "15.3.2",
+      "levels": ["L2", "L3"],
+      "chapter": "Secure Coding and Architecture",
+      "area": "Defensive Coding",
+      "keywords": ["secure", "redirect", "ssrf", "outbound request", "coding", "architecture", "defensive", "backend", "makes", "calls", "external", "urls", "follow", "redirects"],
+      "summary": "Check whether where the application backend makes calls to external URLs, it is configured to not follow redirects unless it is intended functionality."
+    },
+    {
+      "id": "15.3.3",
+      "levels": ["L2", "L3"],
+      "chapter": "Secure Coding and Architecture",
+      "area": "Defensive Coding",
+      "keywords": ["secure", "limit", "mass", "assignment", "mass assignment", "bopla", "allowed fields", "dto", "coding", "architecture", "defensive", "countermeasures", "protect", "attacks"],
+      "summary": "Check whether the application has countermeasures to protect against mass assignment attacks by limiting allowed fields per controller and action, e.g., it is not possible to insert or update a field value when it was not intended to be part of that action."
+    },
+    {
+      "id": "15.3.4",
+      "levels": ["L2", "L3"],
+      "chapter": "Secure Coding and Architecture",
+      "area": "Defensive Coding",
+      "keywords": ["secure", "logging", "rate", "limit", "proxy", "coding", "architecture", "defensive", "proxying", "middleware", "components", "transfer", "original", "address"],
+      "summary": "Check whether all proxying and middleware components transfer the user's original IP address correctly using trusted data fields that cannot be manipulated by the end user, and the application and web server use this correct value for logging and security."
+    },
+    {
+      "id": "15.3.6",
+      "levels": ["L2", "L3"],
+      "chapter": "Secure Coding and Architecture",
+      "area": "Defensive Coding",
+      "keywords": ["secure", "prototype", "pollution", "prototype pollution", "javascript", "coding", "architecture", "defensive", "code", "written", "prevents", "instead", "object", "literals"],
+      "summary": "Check whether JavaScript code is written in a way that prevents prototype pollution, for example, by using Set() or Map() instead of object literals."
+    },
+    {
+      "id": "16.2.5",
+      "levels": ["L2", "L3"],
+      "chapter": "Security Logging and Error Handling",
+      "area": "General Logging",
+      "keywords": ["session", "token", "logging", "error", "hash", "handling", "general", "sensitive", "enforces", "protection", "level", "allowed", "certain", "credentials"],
+      "summary": "Check whether when logging sensitive data, the application enforces logging based on the data's protection level. For example, it may not be allowed to log certain data, such as credentials or payment details. Other data, such as session tokens, may only be."
+    },
+    {
+      "id": "16.3.1",
+      "levels": ["L2", "L3"],
+      "chapter": "Security Logging and Error Handling",
+      "area": "Security Events",
+      "keywords": ["authentication", "logging", "error", "metadata", "handling", "events", "operations", "logged", "successful", "unsuccessful", "attempts", "additional", "type", "factors"],
+      "summary": "Check whether all authentication operations are logged, including successful and unsuccessful attempts. Additional metadata, such as the type of authentication or factors used, should also be collected."
+    },
+    {
+      "id": "16.3.2",
+      "levels": ["L2", "L3"],
+      "chapter": "Security Logging and Error Handling",
+      "area": "Security Events",
+      "keywords": ["authorization", "logging", "error", "authorization failure", "audit log", "handling", "events", "failed", "attempts", "logged", "decisions", "sensitive", "accessed", "itself"],
+      "summary": "Check whether failed authorization attempts are logged. For L3, this must include logging all authorization decisions, including logging when sensitive data is accessed (without logging the sensitive data itself)."
+    },
+    {
+      "id": "16.3.3",
+      "levels": ["L2", "L3"],
+      "chapter": "Security Logging and Error Handling",
+      "area": "Security Events",
+      "keywords": ["logging", "error", "business", "logic", "anti-automation", "handling", "events", "logs", "documentation", "attempts", "bypass", "input", "validation"],
+      "summary": "Check whether the application logs the security events that are defined in the documentation and also logs attempts to bypass the security controls, such as input validation, business logic, and anti-automation."
+    },
+    {
+      "id": "16.4.1",
+      "levels": ["L2", "L3"],
+      "chapter": "Security Logging and Error Handling",
+      "area": "Log Protection",
+      "keywords": ["injection", "logging", "error", "handling", "protection", "components", "appropriately", "encode"],
+      "summary": "Check whether all logging components appropriately encode data to prevent log injection."
+    },
+    {
+      "id": "16.5.1",
+      "levels": ["L2", "L3"],
+      "chapter": "Security Logging and Error Handling",
+      "area": "Error Handling",
+      "keywords": ["token", "secret", "logging", "error", "key", "error handling", "stack trace", "information disclosure", "handling", "generic", "message", "returned", "consumer", "unexpected"],
+      "summary": "Check whether a generic message is returned to the consumer when an unexpected or security-sensitive error occurs, ensuring no exposure of sensitive internal system data such as stack traces, queries, secret keys, and tokens."
     }
   ]
 }

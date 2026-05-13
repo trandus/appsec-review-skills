@@ -32,13 +32,14 @@ def matches(item: dict, query: str, level: str | None, chapter: str | None) -> b
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Offline lookup for the focused OWASP ASVS 5.0.0 reference set.")
-    parser.add_argument("--query", default="", help="Keywords, for example authorization or csrf.")
+    parser.add_argument("--query", nargs="*", default=[], help="Keywords, for example authorization or csrf.")
     parser.add_argument("--level", choices=["L1", "L2", "L3"], help="ASVS level.")
     parser.add_argument("--chapter", help="ASVS chapter number, for example 8.")
     args = parser.parse_args()
 
     data = load_data()
-    results = [item for item in data["requirements"] if matches(item, args.query, args.level, args.chapter)]
+    query = " ".join(args.query)
+    results = [item for item in data["requirements"] if matches(item, query, args.level, args.chapter)]
 
     for item in results:
         levels = ",".join(item["levels"])

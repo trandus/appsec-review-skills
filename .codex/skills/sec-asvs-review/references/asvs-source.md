@@ -1,6 +1,6 @@
 # ASVS Source
 
-Dataset `asvs-5.0.0-local.json` is a focused local list of requirements prepared for offline `sec-*` lookup.
+Dataset `asvs-5.0.0-local.json` is a curated local list of requirements prepared for offline `sec-*` lookup.
 
 ## Review Checks
 
@@ -27,8 +27,8 @@ Dataset `asvs-5.0.0-local.json` is a focused local list of requirements prepared
 ## Offline Boundaries
 
 - This file is not a full copy of ASVS and must not be used to claim complete ASVS conformance.
-- The local dataset supports common offline lookup and mapping, not certification.
-- If a precise requirement is missing or current ASVS source details matter, record a `Follow-up` to refresh the dataset from official sources.
+- The local dataset includes only ASVS 5.0.0 mappings currently used by the `sec-*` review flow. It is a compact lookup library for common web/API findings, not a broad ASVS subset and not certification material.
+- If a precise requirement is missing or current ASVS source details matter, record a `Follow-up` to refresh the dataset from official sources before adding that mapping locally.
 - Do not copy long ASVS text into review reports or references.
 
 ## Source Notes
@@ -37,7 +37,10 @@ Dataset `asvs-5.0.0-local.json` is a focused local list of requirements prepared
 - Stable version used for identifiers: 5.0.0, May 2025.
 - OWASP ASVS license: Creative Commons Attribution-ShareAlike 4.0 International.
 - Report identifier format: `v5.0.0-<chapter>.<section>.<requirement>`.
-- The public `asvs-security-review-skill` repository was not used as a source dataset or copied component. It may be evaluated only as process inspiration or as a helper pattern in separate work.
+- Dataset refresh input: official OWASP ASVS 5.0.0 release asset `OWASP_Application_Security_Verification_Standard_5.0.0_en.flat.json`.
+- Selection scope: compact mappings used by current prompts and references for exploitable web/API paths, authentication/session/token handling, authorization, input/data, files, configuration, data protection, logging, supply chain, SSRF, mass assignment, resource consumption, and abuse resistance.
+- Exclusions: ASVS requirements not used by current review prompts or local references. Do not keep unused ASVS requirements locally as a future stash.
+- The public `asvs-security-review-skill` repository was reviewed as process inspiration for bundled ASVS lookup patterns. It was not used as the copied source dataset or as a copied component.
 
 ## Sources
 
