@@ -1,45 +1,31 @@
 # Always-Check Areas
 
-Use this file only as a tiny reminder of obvious, high-yield checks that are easy to miss while looking for deeper issues. It is not a vulnerability catalog and must not replace `risk-baseline.md`. Pick only areas that exist in the audited scope and report only evidence-backed issues.
+Use this file only as a tiny reminder of obvious, high-yield checks that are easy to miss while looking for deeper issues. It is not a vulnerability catalog and must not replace `risk-baseline.md`. Pick only areas that match the audited technology, scope, and exposed surface; report only evidence-backed issues.
 
-## Access Control
+## Access Control And Workflows
 
 - Missing auth on public routes, APIs, files, admin/debug panels.
-- Missing owner, tenant, organization, or role check on object access (IDOR/BOLA).
+- Missing owner, tenant, organization, role, approval, state-transition checks, IDOR/BOLA
 
-## Injections
+## Unsafe Input To Sinks
 
-- SQL/NoSQL/LDAP/query injection.
-- Command, template/expression, path traversal, unsafe redirect.
+- SQL/NoSQL/LDAP/query, command, template/expression, path traversal, unsafe redirect.
+- SSRF, unsafe file import/export/archive handling, attacker-controlled outbound URLs.
 
-## XSS
+## Browser And Rendering
 
-- Reflected, stored, DOM XSS.
-- Raw HTML, unsafe Markdown/rich text, missing output encoding/sanitization.
+- Reflected, stored, or DOM XSS through raw HTML, Markdown/rich text, or missing encoding/sanitization.
+- CSRF, unsafe CORS, and weak sensitive-cookie flags on browser-auth flows.
 
-## Secrets And Passwords
+## Secrets And Sensitive Data
 
-- Passwords, API keys, tokens, connection strings, private keys in repo/config/docs/tests/logs.
-- Weak default secrets or sample values that could work in real deployments.
+- Credentials, API keys, tokens, connection strings, private keys, weak defaults, or production-like sample values.
+- Secrets, PII, auth headers, request bodies, stack traces in logs/errors/responses.
 
 ## Public Debug Surfaces
 
 - Swagger/OpenAPI/ReDoc exposed outside development.
 - Debug, diagnostics, health, metrics, logs, admin/dev endpoints without clear protection.
-
-## Browser Basics
-
-- CSRF on state-changing browser-auth flows.
-- Unsafe CORS and missing Secure/HttpOnly/SameSite on sensitive cookies.
-
-## Files
-
-- Upload/download/delete without authz.
-- Path traversal, public storage, unsafe archive extraction.
-
-## Sensitive Data Leakage
-
-- Secrets, tokens, PII, auth headers, request bodies, stack traces in logs/errors/responses.
 
 ## Proof Rule
 

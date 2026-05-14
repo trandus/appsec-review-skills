@@ -8,15 +8,15 @@ Ten plik jest krótkim przewodnikiem dla osoby, która chce uruchomić review al
 
 | Element | Rola |
 | --- | --- |
-| `sec-appsec-review` | Orkiestracja review, priorytety tierów i evidence gate. |
+| `sec-appsec-review` | Orkiestracja lokalnego review: scope, krótki recon, priorytety i evidence gate. |
 | `sec-reporting` | Kanoniczne typy wyników oraz format raportu. |
-| `sec-asvs-review` | Lokalny mapper OWASP ASVS dla znalezionych problemów. |
-| `risk-baseline.md` | Główna priorytetyzacja obszarów ryzyka. |
-| `always-check.md` | Krótka przypominajka oczywistych, wysokozwrotnych kontroli. |
+| `sec-asvs-review` | Lokalny mapper OWASP ASVS używany po znalezieniu konkretnego problemu. |
+| `risk-baseline.md` | Główna, tierowana priorytetyzacja obszarów ryzyka. |
+| `always-check.md` | Mała przypominajka oczywistych ryzyk dobieranych do technologii i scope'u. |
 
 Zwykły przebieg jest offline: bez internetu, GitHuba, SaaS, runtime access i zewnętrznych skanerów. `repomix` jest opcjonalnym wejściem pomocniczym, gdy istnieje i pasuje do instrukcji repo.
 
-W praktyce użytkownik podaje zakres review, wybiera głębokość i poziom ASVS, a wynik dostaje jako raport. Raport rozdziela potwierdzone problemy od sygnałów, które wymagają dodatkowej walidacji poza samym repozytorium.
+W praktyce użytkownik podaje zakres review, wybiera głębokość i poziom ASVS, a agent szuka realnych ścieżek nadużycia w lokalnym kodzie. Raport rozdziela potwierdzone problemy od sygnałów, które wymagają dodatkowej walidacji poza samym repozytorium.
 
 ## Domyślna Konfiguracja
 
@@ -24,7 +24,7 @@ W praktyce użytkownik podaje zakres review, wybiera głębokość i poziom ASVS
 | --- | --- | --- | --- |
 | `Scope` | całe repo albo wskazany obszar | Część kodu objęta review. Im węższy scope, tym łatwiej o dokładniejsze prześledzenie przepływów. | całe repo, folder, aplikacja, API, moduł domenowy, backend + frontend |
 | `Review Depth` | `standard` | Głębokość review i ilość czasu wydana na śledzenie wariantów [`quick`, `standard`, `deep`]. To nie jest severity wyniku. | `standard` dla zwykłego review, `deep` dla ważnego systemu |
-| `ASVS Level` | `L2` | Poziom OWASP ASVS używany przy mapowaniu znalezionych problemów [`L1`, `L2`, `L3`]. Nie jest checklistą sterującą całym review. | `L2` dla typowej aplikacji, `L3` dla silniejszych wymagań |
+| `ASVS Level` | `L2` | Poziom OWASP ASVS używany przy mapowaniu konkretnych znalezionych problemów [`L1`, `L2`, `L3`]. Nie jest checklistą sterującą całym review. | `L2` dla typowej aplikacji, `L3` dla silniejszych wymagań |
 | `Tier Scope` | bez jawnego ograniczenia | Opcjonalne ograniczenie pracy do wybranych tierów z `risk-baseline.md` [`Tier 1`, `Tier 2`, `Tier 3`]. Przydaje się przy focused review. | `Tier 1 i Tier 2` |
 | `Report Language` | `Polish` | Opcjonalny parametr do świadomej zmiany języka narracji raportu. Bez tego parametru raport powstaje po polsku; nazwy pól i techniczne terminy pozostają w naturalnej formie. | `Polish`, `English` |
 | Tryb | offline | Zakłada pracę na lokalnych plikach i kontekście od użytkownika [`offline`]. Runtime, skanery i chmura zwykle trafiają do osobnego follow-up. | offline review, osobny follow-up dla runtime/skanerów/chmury |
@@ -48,8 +48,8 @@ W praktyce użytkownik podaje zakres review, wybiera głębokość i poziom ASVS
 | `Observation` | Krótki sygnał o hardeningu, posture, częściowym dowodzie albo osłabionej kontroli. |
 | `Follow-up` | Zadanie walidacyjne zależne od runtime, produkcji, skanera, chmury/SaaS, dostępu albo aktualnej dokumentacji. |
 | `Evidence Gate` | Próg dowodu wymagany do uznania problemu za `Finding`. Szczegóły są w skillach. |
-| `Risk Baseline` | Lokalny model priorytetów opisany w `risk-baseline.md`. Pomaga zacząć od obszarów zwykle najbardziej opłacalnych w review. |
-| `Always Check` | Mała przypominajka w `always-check.md` dla oczywistych klas ryzyka, które łatwo przeoczyć. |
+| `Risk Baseline` | Lokalny model priorytetów opisany w `risk-baseline.md`. Pomaga zacząć od obszarów zwykle najbardziej opłacalnych w review, bez zamiany pracy w checklistę. |
+| `Always Check` | Mała przypominajka w `always-check.md` dla oczywistych klas ryzyka, wybieranych tylko wtedy, gdy pasują do technologii, powierzchni i scope'u. |
 | `Out of Scope` | Część systemu albo klasa ryzyka poza ustalonym zakresem danego review. |
 
 `Review Depth`, `ASVS Level` i `Tier Scope` opisują różne rzeczy. `Review Depth` mówi o głębokości pracy, `ASVS Level` o poziomie mapowania standardu, a `Tier Scope` o priorytetach obszarów ryzyka. Żadne z tych pól samo nie oznacza severity. Severity wynika z wpływu, exploitability i kontekstu aplikacji.
