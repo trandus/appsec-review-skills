@@ -5,7 +5,7 @@ Use this file only as a tiny reminder of obvious, high-yield checks that are eas
 ## Access Control
 
 - Missing auth on public routes, APIs, files, admin/debug panels.
-- Missing owner, tenant, organization, or role check on object access.
+- Missing owner, tenant, organization, or role check on object access (IDOR/BOLA).
 
 ## Injections
 
@@ -34,7 +34,7 @@ Use this file only as a tiny reminder of obvious, high-yield checks that are eas
 
 ## Files
 
-- Upload/download without authz.
+- Upload/download/delete without authz.
 - Path traversal, public storage, unsafe archive extraction.
 
 ## Sensitive Data Leakage
