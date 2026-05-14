@@ -74,6 +74,8 @@ Each `Finding` should contain:
 - `ASVS Mapping`: best quick match, or a short note if no suitable mapping is found quickly
 - optional `OWASP Web/API Top 10 Category`
 
+When `Location` contains multiple files, lines, symbols, routes, or configuration keys, present it as a compact table with columns `File` and `Lines / Symbols / Routes`. A single short location may remain a normal `Location: ...` field.
+
 Each `Candidate Finding` should contain:
 
 - `Type`: `Candidate Finding`

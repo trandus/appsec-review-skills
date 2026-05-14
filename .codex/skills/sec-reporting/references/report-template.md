@@ -41,6 +41,12 @@ Use this compact shape for AppSec review reports. Reports are in Polish.
 - Type: Finding
 - Severity:
 - Location:
+
+| File | Lines / Symbols / Routes |
+| --- | --- |
+| `<path/to/file>` | `:<line>`, `<symbol>`, `<route>` |
+| `<path/to/other-file>` | `:<line>` |
+
 - Evidence:
 - Exploit/Risk Path:
 - Impact:
@@ -58,6 +64,11 @@ Use this compact shape for AppSec review reports. Reports are in Polish.
 - Candidate Severity:
 - Confidence:
 - Location:
+
+| File | Lines / Symbols / Routes |
+| --- | --- |
+| `<path/to/file>` | `:<line>`, `<symbol>`, `<route>` |
+
 - Evidence:
 - Missing Confirmation:
 - Potential Exploit/Risk Path:
