@@ -1,216 +1,126 @@
 # sec-* AppSec review
 
-`sec-*` to przenośny zestaw czterech skilli do lokalnego AppSec code review. Zwykłe review działa offline po skopiowaniu do repozytorium: bez internetu, Context7, GitHuba, SaaS i zewnętrznych skanerów.
+`sec-*` to przenośny zestaw skilli Codex do lokalnego AppSec code review. Pakiet pomaga przejść repozytorium offline, uporządkować wynik po polsku i dopasować potwierdzone problemy do OWASP ASVS.
 
-## Skille
+Ten plik jest krótkim przewodnikiem dla osoby, która chce uruchomić review albo zrozumieć wynik. Szczegółowe reguły pracy są w skillach i ich referencjach.
 
-| Skill | Rola |
+## Jak To Działa
+
+| Element | Rola |
 | --- | --- |
-| `sec-appsec-review` | Orkiestrator review: scope, `Review Depth`, `ASVS Level`, flow i raport końcowy. |
-| `sec-repo-recon` | Rozpoznanie struktury repo, stacku, entry pointów, konfiguracji, zależności i opcjonalnych lokalnych zasad hostującego repo. |
-| `sec-asvs-review` | Lokalny lookup OWASP ASVS, poziomy `L1`, `L2`, `L3`, `ASVS Mapping` i rozróżnienie ASVS od OWASP Web/API Top 10. |
-| `sec-reporting` | Format raportu oraz rozdzielenie `Findings`, `Observations` i `Follow-up`. |
+| `sec-appsec-review` | Orkiestracja review, priorytety tierów i evidence gate. |
+| `sec-reporting` | Kanoniczne typy wyników oraz format raportu. |
+| `sec-asvs-review` | Lokalny mapper OWASP ASVS dla znalezionych problemów. |
+| `risk-baseline.md` | Główna priorytetyzacja obszarów ryzyka. |
+| `always-check.md` | Krótka przypominajka oczywistych, wysokozwrotnych kontroli. |
 
-## Szybki Start
+Zwykły przebieg jest offline: bez internetu, GitHuba, SaaS, runtime access i zewnętrznych skanerów. `repomix` jest opcjonalnym wejściem pomocniczym, gdy istnieje i pasuje do instrukcji repo.
 
-1. Skopiuj foldery `.codex/skills/sec-*` oraz `SEC-README.md` do głównego folderu repozytorium.
-2. Uruchom jeden z trzech promptów poniżej.
-3. Najpierw rozpoznaj lokalne instrukcje hostującego repo, jeśli istnieją: instrukcje agentów, README, mapy projektu, dokumentację architektury, lokalne skille, zasady wyszukiwania plików i komendy.
-4. Domyślny wybór dla zwykłego review to `standard + ASVS L2`.
+W praktyce użytkownik podaje zakres review, wybiera głębokość i poziom ASVS, a wynik dostaje jako raport. Raport rozdziela potwierdzone problemy od sygnałów, które wymagają dodatkowej walidacji poza samym repozytorium.
 
-## Praca Offline
+## Domyślna Konfiguracja
 
-Normalne review korzysta z lokalnego repo, lokalnych instrukcji, `SEC-README.md`, skilli `sec-*`, referencji pod `.codex/skills/sec-appsec-review/references/` i lokalnego datasetu ASVS. Pakiet nie uruchamia automatycznie `npm audit`, `dotnet package list --vulnerable`, `dotnet list package --vulnerable`, CodeQL ani Semgrep.
-
-Wyniki narzędzi mogą być przekazane ręcznie albo użyte lokalnie na wyraźne żądanie jako materiał pomocniczy, ale `Finding` nadal wymaga dowodu w kodzie albo prześledzonego braku kontroli.
-
-## ASVS Lookup Offline
-
-`sec-asvs-review` ma lokalny, kuratorowany dataset `references/asvs-5.0.0-local.json` i helper. Dataset zawiera tylko mapowania ASVS 5.0.0 używane przez obecne skille, prompty i referencje: bazowe web/API ryzyka oraz najważniejsze ścieżki auth/authz, API, danych, konfiguracji, supply chain i logowania. Nie jest pełną kopią ASVS, nie zawiera całego L1 i nie służy do deklarowania certyfikacji ASVS.
-
-```powershell
-python .codex/skills/sec-asvs-review/scripts/asvs_lookup.py --level L2 --query authorization
-python .codex/skills/sec-asvs-review/scripts/asvs_lookup.py --level L2 --query injection
-python .codex/skills/sec-asvs-review/scripts/asvs_lookup.py --level L2 --query csrf
-```
-
-ASVS 5.0.0 jest głównym standardem wymagań i mapowania. OWASP Web Top 10:2021 oraz OWASP API Security Top 10:2023 są pomocniczymi kategoriami i perspektywami ryzyka, np. `A01 Broken Access Control` albo `API1:2023 Broken Object Level Authorization`. `ASVS Level` nie jest severity, `Review Depth` ani kategorią OWASP Web/API Top 10.
-
-## Format Raportu
-
-Raport po review zawsze ma być napisany po polsku. Używaj normalnego, czytelnego języka polskiego w opisach ryzyka, dowodów, wpływu, rekomendacji i testów. Angielskie określenia zostawiaj tylko wtedy, gdy są utrwalonymi terminami domenowymi bez rozsądnego polskiego odpowiednika albo jednoznacznymi nazwami standardów, klas podatności, pól raportu, bibliotek, narzędzi, nagłówków, konfiguracji lub API.
-
-Unikaj przypadkowego mieszania polskiego i angielskiego w jednym zdaniu. Jeśli polski odpowiednik jest naturalny, użyj polskiego, np. `dowód`, `wpływ`, `ścieżka ryzyka`, `zalecenie`, `test regresyjny`, `uprawnienie`, `właściciel zasobu`. Zachowuj krótkie terminy techniczne tam, gdzie poprawiają precyzję, np. `XSS`, `SSRF`, `CSRF`, `IDOR/BOLA`, `JWT`, `OAuth/OIDC`, `claim`, `tenant`, `endpoint`, `cookie`, `lockfile`.
-
-Każdy raport musi zawierać sekcje `Findings`, `Observations` i `Follow-up`, jeśli te kategorie realnie występują. Jeśli kategoria nie ma wyników, napisz to jawnie, np. `Findings: brak potwierdzonych findingów`.
-
-| Typ wyniku | Kiedy użyć | Wymagane elementy |
-| --- | --- | --- |
-| `Finding` | Potwierdzony problem z dowodem w kodzie albo prześledzonym brakiem wymaganej kontroli. | `Title`, `Severity`, `Confidence`, `Status`, `Location`, `Evidence`, `Attack Variant`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, `ASVS Mapping` albo uzasadnienie braku mapowania, opcjonalnie `OWASP Web/API Top 10 Category`. |
-| `Observation` | Obserwacja projektowa, osłabiona kontrola, sygnał narzędziowy albo hipoteza bez wystarczającego dowodu. | Częściowy dowód, powód braku kwalifikacji jako `Finding`, sugerowany następny krok. |
-| `Follow-up` | Pytanie, walidacja narzędziowa, potrzeba aktualnej dokumentacji, niedostępny runtime/login/baza/konfiguracja albo osobne sprawdzenie. | Co trzeba sprawdzić, dlaczego to potrzebne, jaki wynik odblokuje decyzję. |
-
-Review nie implementuje zmian. Dla findingów zwraca `Remediation` oraz `Regression Test`.
-
-## Poziomy Wyszukiwania / Review Depth
-
-`Review Depth` określa budżet pracy, szerokość pokrycia i głębokość walidacji. W promptach zmieniaj tylko wartość parametru `Review Depth`; nie dopisuj osobnych checklist dla wybranego poziomu. Skill odczytuje znaczenie poziomu z `.codex/skills/sec-appsec-review/references/review-depth-profiles.md`.
-
-Dostępne poziomy:
-
-| `Review Depth` | Kiedy użyć | Co agent ma zrobić | Ograniczenia |
+| Ustawienie | Domyślnie | Znaczenie | Przykłady |
 | --- | --- | --- | --- |
-| `quick` | Szybkie wyszukiwanie najważniejszych ryzyk albo wstępny sweep dużego repo. | Sprawdzić najważniejsze entry pointy, top web/API risks, reprezentatywne przepływy, bazową konfigurację, oczywiste luki auth/authz, główne wejścia danych i najbardziej ryzykowne zależności. | Raport musi jasno opisać sampling i pominięte obszary. |
-| `standard` | Domyślny poziom dla zwykłego review. | Prześledzić główne end-to-end flows, reprezentatywne warianty negatywne, ownership/tenant boundaries, sensitive data, logging, konfigurację, główne ryzyka web/API i mapowanie ASVS. | Nie udaje pełnej certyfikacji ani pełnego pentestu runtime. |
-| `deep` | Pogłębione wyszukiwanie dla wysokiego ryzyka, krytycznego scope albo ważnej aplikacji. | Dodać szerszą analizę wariantów, więcej ścieżek negatywnych, missing-control analysis, cross-layer interactions, user-provided tool output i szerszy dependency/supply-chain review. | Jeśli scope jest za szeroki, agent ma go podzielić albo jawnie ograniczyć. |
+| `Scope` | całe repo albo wskazany obszar | Część kodu objęta review. Im węższy scope, tym łatwiej o dokładniejsze prześledzenie przepływów. | całe repo, folder, aplikacja, API, moduł domenowy, backend + frontend |
+| `Review Depth` | `standard` | Głębokość review i ilość czasu wydana na śledzenie wariantów [`quick`, `standard`, `deep`]. To nie jest severity wyniku. | `standard` dla zwykłego review, `deep` dla ważnego systemu |
+| `ASVS Level` | `L2` | Poziom OWASP ASVS używany przy mapowaniu znalezionych problemów [`L1`, `L2`, `L3`]. Nie jest checklistą sterującą całym review. | `L2` dla typowej aplikacji, `L3` dla silniejszych wymagań |
+| `Tier Scope` | bez jawnego ograniczenia | Opcjonalne ograniczenie pracy do wybranych tierów z `risk-baseline.md` [`Tier 1`, `Tier 2`, `Tier 3`]. Przydaje się przy focused review. | `Tier 1 i Tier 2` |
+| Tryb | offline | Zakłada pracę na lokalnych plikach i kontekście od użytkownika [`offline`]. Runtime, skanery i chmura zwykle trafiają do osobnego follow-up. | offline review, osobny follow-up dla runtime/skanerów/chmury |
+| `repomix` | opcjonalny | Spakowany widok repo jako pomoc w nawigacji po większym kodzie. Nie zastępuje lokalnych plików jako dowodu. | brak, istniejący output repomix |
+| Lokalne instrukcje repo | obecne pliki instrukcji | Dodatkowy kontekst projektu, np. lokalne zasady pracy i struktura aplikacji. | `AGENTS.md`, `CLAUDE.md`, README, docs |
+| Skille | `sec-appsec-review`, `sec-reporting`, `sec-asvs-review` | Minimalny zestaw aktywny dla typowego review: prowadzenie review, raport i mapowanie ASVS. | zestaw `sec-*` |
+| Pliki wyjściowe | `docs/appsec/...` w promptach | Miejsce na zapis promptu i raportu, żeby dało się odtworzyć zakres review. | `{data_iso}_{aplikacja}-prompt.md`, `{data_iso}_{aplikacja}.md` |
 
-## Poziomy ASVS / ASVS Level
+`standard` i `L2` są dobrym punktem startowym dla zwykłej aplikacji biznesowej. `quick` pasuje do szybkiego przeglądu albo małego scope'u. `deep` pasuje do ważnego systemu, większego ryzyka albo drugiego przejścia po kodzie. `L3` ma sens przy silniejszych wymaganiach bezpieczeństwa albo sweepie architektonicznym.
 
-`ASVS Level` określa rygor wymagań używanych do mapowania findingów. Nie jest severity, `Review Depth` ani kategorią OWASP Top 10. Pełne mapowanie jest obsługiwane przez `sec-asvs-review` i lokalny dataset `asvs-5.0.0-local.json`.
+## Pojęcia
 
-| `ASVS Level` | Kiedy użyć | Znaczenie w review |
-| --- | --- | --- |
-| `L1` | Małe, niskiego ryzyka albo szybkie review, gdy celem jest podstawowy poziom kontroli. | Mapowanie do podstawowych wymagań bezpieczeństwa aplikacji. |
-| `L2` | Domyślny poziom dla typowego web/API review. | Praktyczny balans między kosztem a rygorem dla aplikacji przetwarzających istotne dane lub operacje. |
-| `L3` | Krytyczne systemy, wysokie ryzyko, mocne wymagania regulacyjne albo szczególnie wrażliwe dane. | Największy rygor mapowania; zwykle wymaga głębszego review, silniejszych dowodów i jawnego zakresu. |
+| Pojęcie | Krótko |
+| --- | --- |
+| `Review Depth` | Profil kosztu i pokrycia review [`quick`, `standard`, `deep`]. |
+| `ASVS Level` | Poziom wymagań używany przy mapowaniu znalezionego problemu [`L1`, `L2`, `L3`]. |
+| `Tier Scope` | Ograniczenie pracy do wskazanych tierów z `risk-baseline.md` [`Tier 1`, `Tier 2`, `Tier 3`], np. `Tier 1 i Tier 2`. |
+| `Finding` | Potwierdzona podatność lub materialne ryzyko z lokalnym dowodem i realistyczną ścieżką nadużycia. |
+| `Candidate Finding` | Prawdopodobna podatność z lokalnym dowodem, ale bez pełnego potwierdzenia. |
+| `Observation` | Krótki sygnał o hardeningu, posture, częściowym dowodzie albo osłabionej kontroli. |
+| `Follow-up` | Zadanie walidacyjne zależne od runtime, produkcji, skanera, chmury/SaaS, dostępu albo aktualnej dokumentacji. |
+| `Evidence Gate` | Próg dowodu wymagany do uznania problemu za `Finding`. Szczegóły są w skillach. |
+| `Risk Baseline` | Lokalny model priorytetów opisany w `risk-baseline.md`. Pomaga zacząć od obszarów zwykle najbardziej opłacalnych w review. |
+| `Always Check` | Mała przypominajka w `always-check.md` dla oczywistych klas ryzyka, które łatwo przeoczyć. |
+| `Out of Scope` | Część systemu albo klasa ryzyka poza ustalonym zakresem danego review. |
 
-Jeśli wybrany poziom nie mieści żądanego scope, agent ma zawęzić zakres, podzielić review albo jawnie opisać ograniczenia. Nie wolno sugerować pełnego pokrycia, jeśli faktycznie wykonano tylko sampling.
+`Review Depth`, `ASVS Level` i `Tier Scope` opisują różne rzeczy. `Review Depth` mówi o głębokości pracy, `ASVS Level` o poziomie mapowania standardu, a `Tier Scope` o priorytetach obszarów ryzyka. Żadne z tych pól samo nie oznacza severity. Severity wynika z wpływu, exploitability i kontekstu aplikacji.
 
-Przykład użycia w promptcie:
+Raport ma cztery główne typy wyników. `Finding` to wynik najmocniejszy, bo ma lokalny dowód i realistyczną ścieżkę nadużycia. `Candidate Finding` jest blisko findingu, ale brakuje jednego ważnego potwierdzenia, np. konfiguracji produkcyjnej albo reachability. `Observation` jest lżejszym sygnałem. `Follow-up` opisuje sprawdzenie, którego nie da się rozstrzygnąć z samego repo.
 
-```text
-Review Depth: standard (dostępne: quick, standard, deep)
-ASVS Level: L2 (dostępne: L1, L2, L3)
-```
+Szczegóły progów, pól raportu i zasad klasyfikacji są w skillach. `SEC-README.md` jest krótką dokumentacją użytkową, a nie źródłem reguł pracy agenta.
 
 ## Prompty
 
-W promptach ustawiaj tylko parametry, np. `Review Depth: standard` i `ASVS Level: L2`. Znaczenie poziomów jest opisane w skillach, szczególnie w `review-depth-profiles.md` i `sec-asvs-review`, więc użytkownik może zmienić poziom bez przepisywania całego promptu.
+W promptach zwykle zmienia się tylko `Scope`, `Review Depth`, `ASVS Level` i nazwę aplikacji/scope.
 
-### 1. Najważniejszy Prompt: Całe Repo
-
-**Kiedy użyć**
-
-- Gdy chcesz wykonać główny, praktyczny przegląd bezpieczeństwa całego repo.
-- Gdy priorytetem są exploitable paths, ASVS, OWASP Web Top 10 i OWASP API Security Top 10.
-
-**Zakres**
-
-| Tier | Priorytet |
-| --- | --- |
-| `Tier 1` | Access control, API object/property/function authorization, auth/session lifecycle, injection, XSS/template injection, unsafe file operations. |
-| `Tier 2` | SSRF, CSRF/CORS, destructive operations, race/replay/idempotency, secrets/config, sensitive data/logging, API resource consumption. |
-| `Tier 3` | Dependencies/supply-chain, crypto/JWT/key handling, rate limiting, business logic abuse, API inventory, unsafe consumption of upstream APIs. |
-
-**Prompt**
+### 1. Całe Repo
 
 ```text
-Cel: użyj `sec-appsec-review` do szerokiego AppSec review całego repo z priorytetem na najbardziej exploitable ścieżki ataku.
+Cel: użyj $sec-appsec-review do szerokiego AppSec review całego repo. Priorytetem jest znalezienie jak najwięcej realnych, exploitable podatności w jednym przebiegu.
 
 Scope: całe repo.
-Review Depth: standard (dostępne: quick, standard, deep)
-ASVS Level: L2 (dostępne: L1, L2, L3)
-Tryb: offline, bez dostępu do internetu, GitHuba, SaaS i zewnętrznych skanerów podczas zwykłego review.
+Review Depth: standard
+ASVS Level: L2
+Tryb: offline, bez internetu, GitHuba, SaaS, runtime access i zewnętrznych skanerów podczas zwykłego review.
 
-Najpierw użyj `sec-repo-recon`, żeby rozpoznać lokalne instrukcje hostującego repo, architekturę, aplikacje, entry pointy, modele danych, storage, integracje, konfigurację, zależności i miejsca, gdzie przepływają identyfikatory zasobów.
+Stosuj lokalne instrukcje repo, takie jak `AGENTS.md`, `CLAUDE.md`, README i lokalne wskazówki. Użyj `repomix` jeśli jest dostępny, zgodny z instrukcjami repo i realnie przydatny.
 
-Użyj ASVS 5.0.0 jako standardu wymagań i mapowania. Użyj OWASP Web Top 10:2021 oraz OWASP API Security Top 10:2023 jako pomocniczych kategorii ryzyka, nie jako zamiennika ASVS.
+Priorytetyzuj pracę według tierów z baseline $sec-appsec-review.
 
-Priorytety:
-- Tier 1: access control, API object/property/function authorization, auth/session lifecycle, injection, XSS/template injection i unsafe file operations.
-- Tier 2: SSRF, CSRF/CORS, destructive operations, race/replay/idempotency, secrets/config, sensitive data/logging i API resource consumption.
-- Tier 3: dependencies/supply-chain, crypto/JWT/key handling, rate limiting, business logic abuse, API inventory i unsafe consumption of upstream APIs.
+Nie implementuj poprawek. Raportuj tylko problemy z lokalnym dowodem i realistyczną ścieżką nadużycia jako `Findings`. Prawdopodobne podatności bez pełnego potwierdzenia przenieś do `Candidate Findings`; hardening i częściowe sygnały do `Observations`; walidacje zależne od runtime, środowiska, skanerów, chmury/SaaS albo aktualnej dokumentacji do `Follow-up`.
 
-Wymagania:
-- Najpierw zmapuj powierzchnię ataku i wybierz główne ścieżki do prześledzenia zgodnie z `Review Depth`.
-- Dla identyfikatorów zasobów sprawdzaj server-side owner/tenant/organization/permission binding przed użyciem obiektu.
-- Dla injection, XSS, SSRF, plików, redirectów i deserializacji wykonuj source-to-sink tracing.
-- Dla operacji wysokiego wpływu sprawdzaj authz, replay, race/TOCTOU, idempotency, audit logging i właściwe ograniczenia nadużyć.
-- Nie implementuj poprawek. `Finding` raportuj tylko z dowodem w kodzie albo prześledzonym brakiem wymaganej kontroli. Hipotezy przenieś do `Observations` albo `Follow-up`.
-
-Output: zwróć raport po polsku z sekcjami `Findings`, `Observations` i `Follow-up`, jeśli realnie występują. Jeśli sekcja nie ma wyników, napisz to jawnie. Każdy `Finding` musi zawierać `Title`, `Severity`, `Confidence`, `Status`, `Location`, `Evidence`, `Attack Variant`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, `ASVS Mapping` i opcjonalne `OWASP Web/API Top 10 Category`.
+Zwróć raport po polsku z sekcjami `Findings`, `Candidate Findings`, `Observations` i `Follow-up`.
 
 Zapisz użyty prompt w `docs/appsec/{data_iso}_{aplikacja}-prompt.md`.
 Zapisz raport w `docs/appsec/{data_iso}_{aplikacja}.md`.
 ```
 
-### 2. Ten Sam Zakres Dla Wskazanej Aplikacji Albo Folderów
-
-**Kiedy użyć**
-
-- Gdy repo zawiera kilka aplikacji, API, frontendów albo modułów.
-- Gdy chcesz taki sam poziom review jak w promptcie 1, ale tylko dla konkretnego scope.
-
-**Zakres**
-
-Ten prompt ma te same priorytety i wymagania co prompt 1, ale ogranicza review do `<scope>`, np. folderów, jednej aplikacji, API, frontend + backend, route group albo modułu domenowego.
-
-**Prompt**
+### 2. Wskazany Scope + Tier 1 i Tier 2
 
 ```text
-Cel: użyj `sec-appsec-review` do AppSec review wskazanego obszaru aplikacji z takim samym modelem ryzyka jak główny prompt dla całego repo.
+Cel: użyj $sec-appsec-revie` do AppSec review wskazanego obszaru. Priorytetem jest znalezienie jak najwięcej realnych, exploitable podatności w tym zakresie.
 
 Scope: `<opisz scope, np. foldery, jedna aplikacja, jedno API, web app, route group, moduł domenowy albo backend project + odpowiadający frontend>`.
-Review Depth: standard (dostępne: quick, standard, deep)
-ASVS Level: L2 (dostępne: L1, L2, L3)
-Tryb: offline, bez dostępu do internetu, GitHuba, SaaS i zewnętrznych skanerów podczas zwykłego review.
+Review Depth: standard
+ASVS Level: L2
+Tier Scope: Tier 1 i Tier 2
+Tryb: offline, bez internetu, GitHuba, SaaS, runtime access i zewnętrznych skanerów podczas zwykłego review.
 
-Najpierw użyj `sec-repo-recon`, żeby zidentyfikować granice scope, powiązane entry pointy, modele danych, storage, integracje, konfigurację i frontend/backend paths. Następnie ogranicz analizę do `<scope>`.
+Stosuj lokalne instrukcje repo, takie jak `AGENTS.md`, `CLAUDE.md`, README i lokalne wskazówki. Użyj `repomix` jeśli jest dostępny, zgodny z instrukcjami repo i realnie przydatny.
 
-Użyj ASVS 5.0.0 jako standardu wymagań i mapowania. Użyj OWASP Web Top 10:2021 oraz OWASP API Security Top 10:2023 jako pomocniczych kategorii ryzyka, nie jako zamiennika ASVS.
+Priorytetyzuj pracę według tierów z baseline $sec-appsec-review, ograniczając ten przebieg do `Tier 1` i `Tier 2`.
 
-Priorytety:
-- Tier 1: access control, API object/property/function authorization, auth/session lifecycle, injection, XSS/template injection i unsafe file operations.
-- Tier 2: SSRF, CSRF/CORS, destructive operations, race/replay/idempotency, secrets/config, sensitive data/logging i API resource consumption.
-- Tier 3: dependencies/supply-chain, crypto/JWT/key handling, rate limiting, business logic abuse, API inventory i unsafe consumption of upstream APIs.
+Nie implementuj poprawek. Raportuj tylko problemy z lokalnym dowodem i realistyczną ścieżką nadużycia jako `Findings`. Prawdopodobne podatności bez pełnego potwierdzenia przenieś do `Candidate Findings`; hardening i częściowe sygnały do `Observations`; walidacje zależne od runtime, środowiska, skanerów, chmury/SaaS albo aktualnej dokumentacji do `Follow-up`.
 
-Wymagania:
-- Nie rób review całego repo. Elementy spoza `<scope>` oznacz jako `Out of Scope` albo `Follow-up`, jeśli wymagają osobnego review.
-- Najpierw zmapuj powierzchnię ataku w `<scope>` i wybierz główne ścieżki do prześledzenia zgodnie z `Review Depth`.
-- Dla identyfikatorów zasobów sprawdzaj server-side owner/tenant/organization/permission binding przed użyciem obiektu.
-- Dla injection, XSS, SSRF, plików, redirectów i deserializacji wykonuj source-to-sink tracing.
-- Dla operacji wysokiego wpływu sprawdzaj authz, replay, race/TOCTOU, idempotency, audit logging i właściwe ograniczenia nadużyć.
-- Nie implementuj poprawek. `Finding` raportuj tylko dla problemów potwierdzonych w `<scope>`. Hipotezy przenieś do `Observations` albo `Follow-up`.
-
-Output: zwróć raport po polsku z sekcjami `Findings`, `Observations`, `Follow-up` oraz `Out of Scope`, jeśli realnie występują. Jeśli sekcja nie ma wyników, napisz to jawnie. Każdy `Finding` musi zawierać `Title`, `Severity`, `Confidence`, `Status`, `Location`, `Evidence`, `Attack Variant`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, `ASVS Mapping` i opcjonalne `OWASP Web/API Top 10 Category`.
+Zwróć raport po polsku z sekcjami `Findings`, `Candidate Findings`, `Observations`, `Follow-up` oraz `Out of Scope`, jeśli występuje.
 
 Zapisz użyty prompt w `docs/appsec/{data_iso}_{aplikacja}-prompt.md`.
 Zapisz raport w `docs/appsec/{data_iso}_{aplikacja}.md`.
 ```
 
-### 3. Dodatkowy Sweep Dla Podatności Spoza Głównego Zakresu
-
-**Kiedy użyć**
-
-- Po promptcie 1 albo 2, gdy chcesz sprawdzić rzadsze albo bardziej architektoniczne klasy ryzyka.
-- Gdy repo ma reverse proxy, cache, nietypowe parsery, sandboxing, native/process isolation, rozproszone serwisy albo istotne IaC/deployment.
-
-**Zakres**
-
-- Request smuggling, cache poisoning, unsafe proxy/header trust, host/header confusion.
-- Sandbox escapes, unsafe native/process isolation, parser differentials, unusual deserialization/parser behavior.
-- Advanced crypto misuse, trust boundaries między serwisami, deployment/IaC-only risks, reverse-proxy-only security assumptions.
-
-**Prompt**
+### 3. Dodatkowy Sweep Architektoniczny
 
 ```text
-Cel: użyj `sec-appsec-review` do dodatkowego sweepu całego repo dla podatności spoza głównego web/API zakresu. To jest uzupełnienie promptu głównego, nie jego zamiennik.
+Cel: użyj $sec-appsec-review do dodatkowego sweepu całego repo dla rzadszych albo architektonicznych klas ryzyka. To jest uzupełnienie głównego review, nie zamiennik.
 
-Scope: całe repo, ale tylko pod kątem rzadziej występujących albo architektonicznych klas ryzyka: request smuggling, cache poisoning, unsafe proxy/header trust, host/header confusion, sandbox escapes, unsafe native/process isolation, parser differentials, unusual deserialization/parser behavior, advanced crypto misuse, multi-service trust boundaries, deployment/IaC-only risks i reverse-proxy-only security assumptions.
+Scope: całe repo, ale tylko pod kątem request smuggling, cache poisoning, unsafe proxy/header trust, host/header confusion, sandbox escapes, unsafe native/process isolation, parser differentials, unusual deserialization/parser behavior, advanced crypto misuse, multi-service trust boundaries, deployment/IaC-only risks i reverse-proxy-only security assumptions.
 
-Review Depth: standard (dostępne: quick, standard, deep)
-ASVS Level: L2 (dostępne: L1, L2, L3)
-Tryb: offline, bez dostępu do internetu, GitHuba, SaaS i zewnętrznych skanerów podczas zwykłego review.
+Review Depth: standard
+ASVS Level: L3
+Tryb: offline, bez internetu, GitHuba, SaaS, runtime access i zewnętrznych skanerów podczas zwykłego review.
 
-Użyj ASVS 5.0.0 jako standardu wymagań i mapowania. OWASP Web/API Top 10 może być użyte tylko jako pomocnicza kategoria ryzyka, jeśli pasuje do potwierdzonego problemu.
+Stosuj lokalne instrukcje repo, takie jak `AGENTS.md`, `CLAUDE.md`, README i lokalne wskazówki. Użyj `repomix` jeśli jest dostępny, zgodny z instrukcjami repo i realnie przydatny.
 
-Wymagania:
-- Najpierw sprawdź, czy dana klasa ryzyka ma realną powierzchnię w repo. Jeśli nie, opisz ją krótko jako `Observation` albo pomiń z jasną notatką zakresową.
-- Nie raportuj spekulacyjnych `Finding`. `Finding` wymaga kodu, konfiguracji, IaC albo prześledzonej architektonicznej ścieżki braku kontroli.
-- Jeśli decyzja zależy od runtime, reverse proxy, CDN, cloud gateway, WAF, konfiguracji produkcyjnej albo aktualnej dokumentacji, przenieś to do `Follow-up`.
-- Nie implementuj poprawek.
+Najpierw sprawdź, czy dana klasa ryzyka ma realną powierzchnię w repo. Nie raportuj spekulacyjnych `Findings`; użyj `Candidate Findings`, krótkich `Observations` albo `Follow-up`, gdy brakuje pełnego potwierdzenia.
 
-Output: zwróć raport po polsku z sekcjami `Findings`, `Observations` i `Follow-up`, jeśli realnie występują. Jeśli sekcja nie ma wyników, napisz to jawnie. Każdy `Finding` musi zawierać `Title`, `Severity`, `Confidence`, `Status`, `Location`, `Evidence`, `Attack Variant`, `Risk Path`, `Impact`, `Remediation`, `Regression Test`, `ASVS Mapping` albo uzasadnienie braku mapowania oraz opcjonalne `OWASP Web/API Top 10 Category`.
+Zwróć raport po polsku z sekcjami `Findings`, `Candidate Findings`, `Observations` i `Follow-up`.
 
 Zapisz użyty prompt w `docs/appsec/{data_iso}_{aplikacja}-prompt.md`.
 Zapisz raport w `docs/appsec/{data_iso}_{aplikacja}.md`.
@@ -218,15 +128,13 @@ Zapisz raport w `docs/appsec/{data_iso}_{aplikacja}.md`.
 
 ## Źródła I Odświeżanie
 
-Referencje skilli są po angielsku i mają sekcje `Sources`. Powstały jako krótkie lokalne opracowanie na podstawie oficjalnych albo uznanych materiałów: OWASP ASVS 5.0.0, OWASP WSTG stable, OWASP Web Top 10:2021, OWASP API Security Top 10:2023, Microsoft Learn dla ASP.NET Core security i NuGet audit, Angular security docs, npm CLI `npm audit`, CodeQL docs i Semgrep docs. Lokalny dataset ASVS został odświeżony z oficjalnego OWASP ASVS 5.0.0 release asset `OWASP_Application_Security_Verification_Standard_5.0.0_en.flat.json`, ale zawiera tylko mapowania używane przez aktualne skille. Niewykorzystywane wymagania nie są trzymane lokalnie. Publiczne repo `OdellMoreno/asvs-security-review-skill` było traktowane jako inspiracja procesu lookup, nie jako kopiowane źródło danych.
-
-Linki źródłowe do odświeżania referencji:
+Internet, Context7 i zewnętrzne źródła są przydatne przy tworzeniu albo odświeżaniu referencji. Normalne review pozostaje offline.
 
 | Obszar | Źródło |
 | --- | --- |
 | OWASP ASVS | https://owasp.org/www-project-application-security-verification-standard/ |
 | OWASP ASVS releases | https://github.com/OWASP/ASVS/releases |
-| OWASP Web Top 10:2021 | https://owasp.org/Top10/2021/ |
+| OWASP Web Top 10:2025 | https://owasp.org/Top10/2025/ |
 | OWASP API Security Top 10:2023 | https://owasp.org/API-Security/editions/2023/en/0x11-t10/ |
 | OWASP WSTG stable | https://owasp.org/www-project-web-security-testing-guide/stable/ |
 | asvs-security-review-skill inspiration | https://github.com/OdellMoreno/asvs-security-review-skill |
@@ -235,5 +143,3 @@ Linki źródłowe do odświeżania referencji:
 | npm audit | https://docs.npmjs.com/cli/v11/commands/npm-audit/ |
 | CodeQL CLI/docs | https://docs.github.com/en/code-security/codeql-cli |
 | Semgrep docs | https://semgrep.dev/docs/ |
-
-Internet i Context7 są dopuszczalne przy tworzeniu albo odświeżaniu referencji. Te linki nie są wymaganiem dla zwykłego review: po skopiowaniu pakietu review powinno korzystać z lokalnych plików i działać offline.

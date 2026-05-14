@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Focused offline ASVS lookup for the sec-* skill set."""
+"""Offline ASVS lookup for the sec-* skill set."""
 
 import argparse
 import json
@@ -31,7 +31,7 @@ def matches(item: dict, query: str, level: str | None, chapter: str | None) -> b
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Offline lookup for the focused OWASP ASVS 5.0.0 reference set.")
+    parser = argparse.ArgumentParser(description="Offline lookup for the local OWASP ASVS 5.0.0 reference set.")
     parser.add_argument("--query", nargs="*", default=[], help="Keywords, for example authorization or csrf.")
     parser.add_argument("--level", choices=["L1", "L2", "L3"], help="ASVS level.")
     parser.add_argument("--chapter", help="ASVS chapter number, for example 8.")
@@ -46,7 +46,7 @@ def main() -> int:
         print(f"v{data['version']}-{item['id']} [{levels}] {item['chapter']} / {item['area']}")
         print(f"  {item['summary']}")
     if not results:
-        print("No match in the focused offline dataset. Record a Follow-up or check the full ASVS when refreshing references.")
+        print("No match in the local offline dataset. Record a Follow-up or write a short mapping rationale.")
     return 0
 
 

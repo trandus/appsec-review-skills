@@ -1,82 +1,61 @@
 ---
 name: sec-appsec-review
-description: Offline-first AppSec code review orchestrator. Use when the user asks for a repository security review, a focused review of one security area, a compact end-to-end AppSec flow, ASVS mapping, or a report with Remediation and Regression Test entries without implementing fixes.
+description: Offline-first AppSec code review orchestrator. Use when the user asks for a repository security review, a focused security review, ASVS mapping, or a Polish report with remediation and regression tests.
+disable-model-invocation: true
 ---
 
 # sec-appsec-review
 
-Run the review as local security code review, not as runtime penetration testing. Do not require internet access, GitHub, SaaS products, Context7, or external scanners during normal review work. Use the local repository, host-repository instructions, the repository-root `SEC-README.md` when present, the `sec-*` skills, the files under `references/`, and the ASVS dataset from `sec-asvs-review`.
+Run a local security code review, not runtime penetration testing. The main goal is to find as many real, exploitable vulnerabilities as practical in one pass for the selected scope and `Review Depth`.
 
-## Tool-Assisted Inputs
+Use the local repository, host-repository instructions such as `AGENTS.md` and `CLAUDE.md` when present, repository-root `SEC-README.md` when present, the `sec-*` skills, and local files under this skill. Do not require internet access, GitHub, SaaS products, Context7, external scanners, or runtime access during normal review work.
 
-Keep the default review offline-first. Do not run dependency, SAST, or security tools unless the user explicitly asks for them or accepts their use for the current review. Optional local tools may include `npm audit`, `dotnet package list --vulnerable`, `dotnet list package --vulnerable`, Semgrep, and CodeQL.
+## Defaults
 
-Treat tool output as review input, not as an automatic `Finding`. Before promoting a tool result, connect it to local evidence such as code, a manifest, a lockfile, configuration, package source settings, or real dependency usage. If a result is not confirmed, not reachable, stale, lacks commit/dependency graph context, or depends on unavailable network access, login, databases, or configuration, report it as an `Observation` or `Follow-up` with the limitation.
+- `Review Depth`: `standard`.
+- `ASVS Level`: `L2`.
+- Default mode: offline, no automatic scanners, no fixes.
+- Optional helper: use `repomix` output when available, allowed by repo instructions, and useful for the repository size or scope. Treat packed output as navigation input; verify material evidence against local files before reporting a `Finding`.
 
-## Review Modes
+## Tiered Review Priority
 
-- **Focused area review**: use when the user names one area, such as auth/authz, input/data, frontend, config/secrets, or dependencies. Keep recon, reference loading, and reporting within that scope while preserving the evidence standard.
-- **Compact full flow**: use when the user asks for local AppSec review of the repository. Move through recon, threat model, entry points, auth/authz, input/data, backend, frontend, config/secrets, dependencies, sensitive data, logging, abuse/rate limiting, and destructive operations.
+Always use the tiered baseline in `references/risk-baseline.md` to decide work order, and apply `references/always-check.md` only as a tiny reminder of obvious, high-yield checks that are easy to miss. Select only the always-check areas that match the audited application, technology, exposed surfaces, and selected scope; do not mechanically execute every area for every review. Tiers prioritize review cost and expected exploitability; they are not severity labels and not ASVS levels. Prioritize confirmed, exploitable paths over broad coverage claims.
 
-## High-Priority Baseline Checks
+- `Tier 1`: start with the most exploitable and usually highest-yield paths.
+- `Tier 2`: continue into important risks that need more context, cross-file tracing, or representative variants.
+- `Tier 3`: cover broader, costlier, architecture-dependent, or uncommon areas when the repository surface justifies them.
 
-When the user asks for broad web/API review, use OWASP Web Top 10 and OWASP API Security Top 10 as risk lenses; use ASVS as the requirement and finding-mapping standard. Prioritize exploitable paths in this order:
+Severity comes from impact, exploitability, and application context, not from the tier number. A `Tier 2` issue can be `critical`, and a `Tier 1` signal can remain an `Observation` if local evidence does not support a realistic abuse path. Correlate small weaknesses across authorization, tenancy, async processing, queues/events, logging gaps, stale state, replay, and idempotency before deciding final severity.
 
-- **Tier 1**: access control, API object/property/function authorization, auth/session lifecycle, injection, XSS/template injection, and unsafe file operations.
-- **Tier 2**: SSRF, CSRF/CORS, destructive operations, race/replay/idempotency, secrets/configuration, sensitive data/security logging, and API resource consumption.
-- **Tier 3**: dependencies/supply-chain, crypto/JWT/key handling, rate limiting, business logic abuse, API inventory, and unsafe consumption of upstream APIs.
+## Review Depth
 
-For every endpoint or handler that accepts a resource identifier, trace whether the backend binds the target object to the current owner, tenant, organization, or explicit permission before using it. Include single-object routes, list/search/filter routes, bulk operations, nested resource IDs, file IDs, export/import, and destructive actions. Prioritize authenticated-but-wrong-user, wrong-role, cross-tenant, file-id swap, bulk object access, replay, and destructive-operation variants.
+- `quick`: limit sampling and focus mainly on `Tier 1`; state important limitations.
+- `standard`: cover `Tier 1`, representative `Tier 2`, and selected `Tier 3` areas based on repository surface.
+- `deep`: broaden variants, negative paths, cross-layer checks, and stronger `Tier 3` coverage.
 
-For injection and XSS, trace source to sink rather than checking names only: SQL/NoSQL/LDAP, command execution, template rendering, SSRF, path traversal, unsafe redirects, deserialization, and HTML/Markdown/JavaScript/CSS/URL sinks.
+ASVS level controls mapping rigor, not review effort or severity. Use `sec-asvs-review` only after a candidate finding exists.
 
-## Review Inputs
+## Evidence Gate
 
-- **Review Depth**: `quick`, `standard`, `deep`. The profile controls work budget, path coverage, variant analysis, and validation depth.
-- **ASVS Level**: `L1`, `L2`, `L3`. The level controls the rigor of OWASP ASVS requirements used for mapping. It is not severity, an OWASP Web/API Top 10 category, or a review-depth profile.
-- Use `standard + ASVS L2` by default unless the user asks otherwise or the scope is very small.
+Report a `Finding` only when local code, configuration, IaC/deployment, routing/exposure evidence, tests, or a traced missing control supports a realistic abuse path. Reference real files, symbols, routes, keys, tests, or narrow code paths.
 
-Depth details are in `references/review-depth-profiles.md`.
+Do not report generic best practices, style issues, missing tests alone, or scanner output alone. If evidence points to a likely vulnerability but needs validation, use `Candidate Finding`. If it is hardening, posture, partial evidence, or a check that cannot be decided from the repo, use `Observation` or `Follow-up`.
 
-## Workflow
+Do not assume cloud, gateway, CDN, WAF, identity-provider, SaaS, framework, SDK, CLI, or production configuration behavior unless it is proven by local repository evidence or user-provided context.
 
-1. Establish scope, Review Depth, ASVS Level, constraints, and whether the review is focused or a compact full flow.
-2. Use `sec-repo-recon` or equivalent recon to identify structure, stack, entry points, auth, configuration, dependencies, and local repository rules.
-3. Build the review streams. Run them sequentially unless the environment and host-repository rules clearly allow a safe split.
-4. Load only the relevant file from `references/` for each stream.
-5. Confirm findings only with code evidence or a traced path showing that a required security control is absent.
-6. Map findings to ASVS through `sec-asvs-review`. Treat OWASP Web Top 10 and OWASP API Security Top 10 only as supporting risk categories.
-7. Use `sec-reporting` and `references/report-template.md` for the final report. Include `Findings`, `Observations`, and `Follow-up` when those categories occur; state that a category has no results when it is empty.
-8. Do not implement fixes during review. For each finding, return `Remediation` and `Regression Test`.
+For secrets, redact values. Report the location and pattern, not the secret value. Treat dummy/sample values as `Observation` unless local evidence shows production-like, deployment-active, shared, colliding, or materially risky use.
 
-## Report Language
+For Swagger/OpenAPI/ReDoc and diagnostics, confirm a `Finding` only when local code/config/IaC indicates non-development exposure, missing auth, sensitive API disclosure, or risky internal/admin/debug surface. Otherwise use `Observation` or `Follow-up`.
 
-The final review report must always be written in Polish. Use clear Polish prose for risk descriptions, evidence explanations, impact, remediation, regression tests, observations, and follow-ups. Keep English only for established domain terms without a reasonable Polish equivalent, exact report field names, standards, vulnerability classes, libraries, tools, headers, configuration keys, APIs, and code identifiers.
+## Output
 
-Avoid casual Polish-English mixing inside explanatory sentences. Prefer natural Polish words when they exist, for example evidence -> `dowód`, impact -> `wpływ`, risk path -> `ścieżka ryzyka`, remediation -> `zalecenie`, regression test -> `test regresyjny`, permission -> `uprawnienie`, owner -> `właściciel zasobu`. Keep concise technical terms when they improve precision, for example `XSS`, `SSRF`, `CSRF`, `IDOR/BOLA`, `JWT`, `OAuth/OIDC`, `claim`, `tenant`, `endpoint`, `cookie`, and `lockfile`.
+Write final review reports in Polish. Use `sec-reporting` as the only source of truth for the compact report shape; this skill orchestrates the review and does not define a separate report template:
 
-When a review is launched from a prompt, preserve the exact prompt and final report as artifacts when requested. Use `docs/appsec/{data_iso}_{aplikacja}-prompt.md` for the prompt and `docs/appsec/{data_iso}_{aplikacja}.md` for the report, where `{aplikacja}` is a short repository, application, scope, or sweep slug.
+- `Findings`: confirmed vulnerabilities or material risks.
+- `Candidate Findings`: likely vulnerabilities with local evidence but missing confirmation.
+- `Observations`: short, lower-detail notes for partial evidence or weakened controls.
+- `Follow-up`: short validation tasks for runtime, production config, scanner, cloud/SaaS, documentation, or access-dependent checks.
 
-## Area References
+Each `Finding` includes `Type`, `Title`, `Severity`, `Location`, `Evidence`, `Exploit/Risk Path`, `Impact`, `Fix`, `Regression Test`, and `ASVS Mapping` when a quick suitable mapping exists. Do not keep verification-needed confidence labels on a `Finding`; move that result to `Candidate Findings` or `Follow-up`.
 
-- `threat-model.md`
-- `entrypoints.md`
-- `api-baseline.md`
-- `auth-authz.md`
-- `input-data.md`
-- `backend-web.md`
-- `frontend-web.md`
-- `config-secrets.md`
-- `dependencies-supply-chain.md`
-- `sensitive-data.md`
-- `privacy-security-logging.md`
-- `abuse-rate-limiting.md`
-- `destructive-operations.md`
-
-Each reference is a short operating guide. Do not treat it as a complete checklist catalog or as a substitute for reasoning over the code under review.
-
-## Boundaries
-
-- The review may accept user-provided tool output as context, or run local tools only when explicitly requested or accepted by the user. The package does not run or require scanners during normal use.
-- When current behavior for a library, framework, SDK, CLI, cloud service, or tool cannot be determined from local code, configuration, or bundled references, record it as a `Follow-up` for a separate reference-refresh task. Do not fetch documentation during normal offline review.
-- Change code only when the user separately asks for a specific finding to be fixed.
+Do not implement fixes unless the user separately asks.

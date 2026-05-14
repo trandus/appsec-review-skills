@@ -1,36 +1,34 @@
 ---
 name: sec-asvs-review
-description: Local OWASP ASVS component for offline requirement lookup, L1/L2/L3 selection, and AppSec finding mapping. Use when a review needs ASVS Mapping, a clear distinction between ASVS and OWASP Web/API Top 10, or requirement lookup without internet access.
+description: Thin local OWASP ASVS mapper for AppSec findings. Use after a candidate finding exists and an ASVS Mapping is needed without internet access.
 ---
 
 # sec-asvs-review
 
-Use OWASP ASVS as the requirements and finding-mapping standard. OWASP Web Top 10 and OWASP API Security Top 10 are only supporting risk categories; they do not replace ASVS and they do not have `L1`, `L2`, or `L3` levels.
+Use ASVS as a lightweight mapping aid, not as the driver of the review. First identify a real vulnerability or material risk; then add the best quick ASVS mapping.
 
-## Offline Data
+OWASP Web Top 10:2025 and OWASP API Security Top 10:2023 are optional risk labels. They do not replace ASVS and do not have `L1`, `L2`, or `L3` levels.
 
-- Focused offline dataset: `references/asvs-5.0.0-local.json`.
-- Source, version, and license notes: `references/asvs-source.md`.
-- Helper lookup: `scripts/asvs_lookup.py`.
+## Local Data
 
-The dataset is a focused local reference set for offline lookup and mapping of common findings. Do not claim full ASVS certification or complete ASVS coverage from this local reference set.
+- Complete local ASVS 5.0.0 dataset: `references/asvs-5.0.0-local.json`.
+- Source/version/license notes: `references/asvs-source.md`.
+- Optional helper: `scripts/asvs_lookup.py`.
 
-## Mapping Workflow
+The dataset contains all ASVS 5.0.0 requirements in the local lookup format. Do not claim ASVS certification or use it as a checklist that drives vulnerability hunting.
 
-1. Establish the ASVS Level: `L1`, `L2`, or `L3`. Default to the level selected by the orchestrator.
-2. Search requirements by chapter, keyword, or risk class. Use the helper or read the JSON directly.
-3. Select the most specific applicable requirement. If only broad requirements match, or no good mapping exists, record why there is no suitable `ASVS Mapping`.
-4. Record mapped requirements with the versioned format, for example `v5.0.0-2.1.1`.
-5. Add `OWASP Web/API Top 10 Category` only as an optional label, for example `A01 Broken Access Control` or `API1:2023 Broken Object Level Authorization`.
+## Mapping Rules
+
+1. Use the selected `ASVS Level`; default is `L2`.
+2. Search by vulnerability class, control, chapter, or keyword.
+3. Select the most specific quick match, formatted like `v5.0.0-2.1.1`.
+4. If no suitable match is found quickly, write a short mapping rationale instead of spending review time on lookup.
+5. Do not let ASVS lookup delay or narrow vulnerability hunting.
 
 ## Helper Examples
 
 ```powershell
 python .codex/skills/sec-asvs-review/scripts/asvs_lookup.py --level L2 --query authorization
-python .codex/skills/sec-asvs-review/scripts/asvs_lookup.py --chapter 8
-python .codex/skills/sec-asvs-review/scripts/asvs_lookup.py --level L3 --query secret
+python .codex/skills/sec-asvs-review/scripts/asvs_lookup.py --level L2 --query injection
+python .codex/skills/sec-asvs-review/scripts/asvs_lookup.py --level L2 --query secret
 ```
-
-## Community skill
-
-The public `asvs-security-review-skill` repository may be treated only as evaluated process inspiration or as a helper pattern. Do not copy it as the basis for this component. If a concrete fragment is ever used, document the source, license, and adaptation scope in `asvs-source.md`.
