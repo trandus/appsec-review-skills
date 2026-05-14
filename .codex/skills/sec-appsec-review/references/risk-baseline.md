@@ -7,6 +7,7 @@ Use this as a compact tiered priority model, not a checklist catalog. The model 
 Start here. These are usually the most exploitable and most cost-effective paths to trace in a local review.
 
 - Access control and authorization boundaries: missing auth/authz, IDOR/BOLA, BOPLA, tenant escape, wrong-role access, forced browsing, frontend-only controls.
+- Business workflow authorization: role, owner, tenant, approval, quota, state transition, and server-side context checks around operations that change state or grant access.
 - Auth, session, token, and identity flows: JWT/OAuth/OIDC validation, cookies, sessions, password reset, invite/magic links, logout, privilege changes, stale access, cached authorization decisions.
 - Injection and unsafe sinks: SQL/NoSQL/LDAP, command/process, template/expression, header/log injection, XXE, unsafe deserialization, unsafe redirects.
 - XSS and unsafe rendering: frontend DOM sinks, backend templates, raw HTML, Markdown/rich text, JavaScript/CSS/URL contexts, sanitizer bypass APIs.
@@ -20,6 +21,7 @@ Start here. These are usually the most exploitable and most cost-effective paths
 Continue here for standard review coverage and representative deeper traces.
 
 - Destructive or high-impact operations: delete, revoke, refund, payout, transfer, publish/unpublish, account deletion, permission changes, webhook replay, duplicate submission, race, TOCTOU, missing idempotency, weak audit.
+- Client-trust and workflow bypass: server trusting client-supplied price, role, owner, tenant, status, limits, approvals, or next-step parameters instead of deriving them from trusted state.
 - Sensitive data exposure: responses, logs, telemetry, errors, exports, caches, bundles, files, broad roles, deletion gaps.
 - Browser-auth controls: CSRF, CORS, SameSite/Secure/HttpOnly, cache headers, state-changing GETs.
 - Dependency and supply-chain risk: lockfiles, broad versions, package sources, dependency confusion, package scripts, containers, CI actions, vulnerable components confirmed by local/tool evidence.
@@ -46,6 +48,4 @@ Use this tier when `Review Depth` is `deep`, when the architecture has a matchin
 
 ## Finding Threshold
 
-A `Finding` needs a local evidence path and realistic abuse path. Scanner output, missing negative tests, suspicious names, or incomplete environment evidence are not enough by themselves.
-
-Use `Candidate Finding` when local evidence points to a likely vulnerability but confirmation is still missing. Use short `Observation` entries for hardening, posture, or partial useful signals. Use short `Follow-up` entries when the decision depends on runtime, production configuration, cloud/gateway/SaaS behavior, current vulnerability data, login/database access, or separate tool execution.
+Use the evidence gate and result types from `sec-appsec-review` and `sec-reporting`. This baseline only helps decide review order; it does not lower the proof threshold for a `Finding`.

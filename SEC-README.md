@@ -78,14 +78,13 @@ Nie implementuj poprawek. Raportuj tylko problemy z lokalnym dowodem i realistyc
 
 Zwróć raport po polsku z sekcjami `Findings`, `Candidate Findings`, `Observations` i `Follow-up`.
 
-Zapisz użyty prompt w `docs/appsec/{data_iso}_{aplikacja}-prompt.md`.
 Zapisz raport w `docs/appsec/{data_iso}_{aplikacja}.md`.
 ```
 
 ### 2. Wskazany Scope + Tier 1 i Tier 2
 
 ```text
-Cel: użyj $sec-appsec-revie` do AppSec review wskazanego obszaru. Priorytetem jest znalezienie jak najwięcej realnych, exploitable podatności w tym zakresie.
+Cel: użyj $sec-appsec-review do AppSec review wskazanego obszaru. Priorytetem jest znalezienie jak najwięcej realnych, exploitable podatności w tym zakresie.
 
 Scope: `<opisz scope, np. foldery, jedna aplikacja, jedno API, web app, route group, moduł domenowy albo backend project + odpowiadający frontend>`.
 Review Depth: standard
@@ -101,11 +100,12 @@ Nie implementuj poprawek. Raportuj tylko problemy z lokalnym dowodem i realistyc
 
 Zwróć raport po polsku z sekcjami `Findings`, `Candidate Findings`, `Observations`, `Follow-up` oraz `Out of Scope`, jeśli występuje.
 
-Zapisz użyty prompt w `docs/appsec/{data_iso}_{aplikacja}-prompt.md`.
 Zapisz raport w `docs/appsec/{data_iso}_{aplikacja}.md`.
 ```
 
 ### 3. Dodatkowy Sweep Architektoniczny
+
+Ten prompt pokazuje przykład focused sweepu dla rzadszych klas ryzyka. Lista obszarów jest zakresem tego przebiegu, nie stałym katalogiem do mechanicznego wykonywania w każdym review.
 
 ```text
 Cel: użyj $sec-appsec-review do dodatkowego sweepu całego repo dla rzadszych albo architektonicznych klas ryzyka. To jest uzupełnienie głównego review, nie zamiennik.
@@ -122,8 +122,8 @@ Najpierw sprawdź, czy dana klasa ryzyka ma realną powierzchnię w repo. Nie ra
 
 Zwróć raport po polsku z sekcjami `Findings`, `Candidate Findings`, `Observations` i `Follow-up`.
 
-Zapisz użyty prompt w `docs/appsec/{data_iso}_{aplikacja}-prompt.md`.
 Zapisz raport w `docs/appsec/{data_iso}_{aplikacja}.md`.
+Zapisz użyty prompt w `docs/appsec/{data_iso}_{aplikacja}-prompt.md`.
 ```
 
 ## Źródła I Odświeżanie

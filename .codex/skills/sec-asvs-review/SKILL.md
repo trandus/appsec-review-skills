@@ -1,11 +1,11 @@
 ---
 name: sec-asvs-review
-description: Thin local OWASP ASVS mapper for AppSec findings. Use after a candidate finding exists and an ASVS Mapping is needed without internet access.
+description: Thin local OWASP ASVS mapper for AppSec findings. Use after a concrete Finding or Candidate Finding exists and an ASVS Mapping is needed without internet access.
 ---
 
 # sec-asvs-review
 
-Use ASVS as a lightweight mapping aid, not as the driver of the review. First identify a real vulnerability or material risk; then add the best quick ASVS mapping.
+Use ASVS as a lightweight mapping aid, not as the driver of the review. First identify a concrete `Finding` or `Candidate Finding`; then add the best quick ASVS mapping when useful.
 
 OWASP Web Top 10:2025 and OWASP API Security Top 10:2023 are optional risk labels. They do not replace ASVS and do not have `L1`, `L2`, or `L3` levels.
 

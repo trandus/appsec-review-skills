@@ -10,6 +10,12 @@ Use this compact shape for AppSec review reports. Reports are in Polish.
 | --- | --- | --- |
 | <technology> | <short role, e.g. backend, frontend, database, auth, tests> | <README/manifest/project/config path> |
 
+## Executive Summary
+
+- <short security conclusion>
+- <highest-priority confirmed finding or "no confirmed findings">
+- <important candidate/follow-up or offline limitation>
+
 ## Summary
 
 | Typ | Liczba |
@@ -19,14 +25,14 @@ Use this compact shape for AppSec review reports. Reports are in Polish.
 | Observations | 0 |
 | Follow-up | 0 |
 
-## Overview
+## Final Findings Overview
 
-| Type | ID | Severity / Candidate Severity | Area |
-| --- | --- | --- | --- |
-| Finding | F-01 | <severity> | <area> |
-| Candidate Finding | CF-01 | <candidate severity> | <area> |
-| Observation | O-01 | n/a | <area> |
-| Follow-up | FU-01 | n/a | <area> |
+| Type | ID | Severity / Candidate Severity | Area | Decision |
+| --- | --- | --- | --- | --- |
+| Finding | F-01 | <severity> | <area> | fix |
+| Candidate Finding | CF-01 | <candidate severity> | <area> | validate |
+| Observation | O-01 | n/a | <area> | observe |
+| Follow-up | FU-01 | n/a | <area> | follow-up |
 
 ## Findings
 
@@ -38,7 +44,9 @@ Use this compact shape for AppSec review reports. Reports are in Polish.
 - Evidence:
 - Exploit/Risk Path:
 - Impact:
-- Fix:
+- Security Goal:
+- Remediation Requirement:
+- Implementation Hint:
 - Regression Test:
 - ASVS Mapping:
 
@@ -53,8 +61,8 @@ Use this compact shape for AppSec review reports. Reports are in Polish.
 - Evidence:
 - Missing Confirmation:
 - Potential Exploit/Risk Path:
-- Validation Needed:
-- Suggested Fix:
+- Validation Test:
+- Remediation Requirement:
 
 ## Observations
 
