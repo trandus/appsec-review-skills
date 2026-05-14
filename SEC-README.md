@@ -26,6 +26,7 @@ W praktyce użytkownik podaje zakres review, wybiera głębokość i poziom ASVS
 | `Review Depth` | `standard` | Głębokość review i ilość czasu wydana na śledzenie wariantów [`quick`, `standard`, `deep`]. To nie jest severity wyniku. | `standard` dla zwykłego review, `deep` dla ważnego systemu |
 | `ASVS Level` | `L2` | Poziom OWASP ASVS używany przy mapowaniu znalezionych problemów [`L1`, `L2`, `L3`]. Nie jest checklistą sterującą całym review. | `L2` dla typowej aplikacji, `L3` dla silniejszych wymagań |
 | `Tier Scope` | bez jawnego ograniczenia | Opcjonalne ograniczenie pracy do wybranych tierów z `risk-baseline.md` [`Tier 1`, `Tier 2`, `Tier 3`]. Przydaje się przy focused review. | `Tier 1 i Tier 2` |
+| `Report Language` | `Polish` | Opcjonalny parametr do świadomej zmiany języka narracji raportu. Bez tego parametru raport powstaje po polsku; nazwy pól i techniczne terminy pozostają w naturalnej formie. | `Polish`, `English` |
 | Tryb | offline | Zakłada pracę na lokalnych plikach i kontekście od użytkownika [`offline`]. Runtime, skanery i chmura zwykle trafiają do osobnego follow-up. | offline review, osobny follow-up dla runtime/skanerów/chmury |
 | `repomix` | opcjonalny | Spakowany widok repo jako pomoc w nawigacji po większym kodzie. Nie zastępuje lokalnych plików jako dowodu. | brak, istniejący output repomix |
 | Lokalne instrukcje repo | obecne pliki instrukcji | Dodatkowy kontekst projektu, np. lokalne zasady pracy i struktura aplikacji. | `AGENTS.md`, `CLAUDE.md`, README, docs |
@@ -41,6 +42,7 @@ W praktyce użytkownik podaje zakres review, wybiera głębokość i poziom ASVS
 | `Review Depth` | Profil kosztu i pokrycia review [`quick`, `standard`, `deep`]. |
 | `ASVS Level` | Poziom wymagań używany przy mapowaniu znalezionego problemu [`L1`, `L2`, `L3`]. |
 | `Tier Scope` | Ograniczenie pracy do wskazanych tierów z `risk-baseline.md` [`Tier 1`, `Tier 2`, `Tier 3`], np. `Tier 1 i Tier 2`. |
+| `Report Language` | Opcjonalna zmiana języka narracji raportu. Domyślnie raport jest po polsku; standardowe pola, klasy podatności, nazwy narzędzi, API, konfiguracje i identyfikatory kodu pozostają stabilne. |
 | `Finding` | Potwierdzona podatność lub materialne ryzyko z lokalnym dowodem i realistyczną ścieżką nadużycia. |
 | `Candidate Finding` | Prawdopodobna podatność z lokalnym dowodem, ale bez pełnego potwierdzenia. |
 | `Observation` | Krótki sygnał o hardeningu, posture, częściowym dowodzie albo osłabionej kontroli. |
@@ -90,6 +92,7 @@ Scope: `<opisz scope, np. foldery, jedna aplikacja, jedno API, web app, route gr
 Review Depth: standard
 ASVS Level: L2
 Tier Scope: Tier 1 i Tier 2
+Report Language: Polish
 Tryb: offline, bez internetu, GitHuba, SaaS, runtime access i zewnętrznych skanerów podczas zwykłego review.
 
 Stosuj lokalne instrukcje repo, takie jak `AGENTS.md`, `CLAUDE.md`, README i lokalne wskazówki. Użyj `repomix` jeśli jest dostępny, zgodny z instrukcjami repo i realnie przydatny.

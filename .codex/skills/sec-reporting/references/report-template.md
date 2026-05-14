@@ -1,6 +1,8 @@
 # Compact AppSec Report Template
 
-Use this compact shape for AppSec review reports. Reports are in Polish.
+Use this compact shape for AppSec review reports. The template is for Polish reports by default. The report language can change only when the user prompt explicitly includes `Report Language: <language>`.
+
+Keep canonical report fields, section names, standards, vulnerability classes, library/tool names, APIs, configuration keys, code identifiers, file paths, symbols, routes, package names, and protocol names stable in their natural form, even when the narrative language changes.
 
 ## Repository Context
 

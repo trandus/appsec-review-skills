@@ -187,3 +187,37 @@ Podaj krótką ocenę końcową:
 - Jeżeli jeden raport ma lepszy finding, ale drugi ma lepsze dowody, zaznacz to wyraźnie.
 - Jeżeli raport zawiera observation/follow-up, nie traktuj tego automatycznie jako confirmed finding.
 ```
+
+## Review spójności i jakości skillów AppSec
+
+```
+# Review spójności i jakości skillów AppSec sec-* i SEC-README.md (jako instrukcji i dokumentacji dla użytkownika)
+
+Jesteś doświadczonym specjalistą IT Security / AppSec.
+
+Tworzę skille do przeglądów repozytoriów aplikacji. Chcę, abyś przeprowadził review aktualnej wersji skillów `sec-*`.
+
+Na razie niczego nie zmieniaj. Najpierw wykonaj dogłębną analizę i przedstaw wnioski.
+
+Podczas analizy trzymaj się zasad opisanych w plikach typu `AGENTS.md`, `CLAUDE.md` lub podobnych instrukcjach repozytorium. Jeżeli zasady repozytorium są sprzeczne ze skillem, wskaż to jako problem.
+
+Sprawdź szczególnie:
+
+- czy treść jest konsekwentna i zrozumiała,
+- czy nie ma sprzeczności, powtórzeń lub duplikatów,
+- czy opisy nie są zbyt długie, szczegółowe albo skomplikowane,
+- czy skille `sec-*` nie wymuszają zbyt sztywnej procedury działania,
+- czy zachowują charakter ogólnych zasad, kierunków i obszarów analizy,
+- czy pozostawiają LLM swobodę decyzji, co dokładnie sprawdzić i jak przeprowadzić review,
+- czy nie zawierają zbyt domenowych lub przypadkowych założeń.
+
+Celem skillów `sec-*` nie jest stworzenie checklisty krok po kroku, ale nadanie LLM dobrego kierunku pracy: wskazanie obszarów, sposobu myślenia, oczekiwanej jakości analizy i formy raportowania.
+
+W odpowiedzi podaj krótko:
+
+1. Najważniejsze problemy.
+2. Miejsca niespójne lub niejasne.
+3. Elementy zbyt szczegółowe lub zbyt proceduralne.
+4. Niezgodności z zasadami repozytorium, w szczególności z `AGENTS.md`, `CLAUDE.md` lub podobnymi instrukcjami.
+5. Sugestie kierunków poprawy, bez przepisywania treści skillów.
+```

@@ -5,7 +5,7 @@ description: Compact Polish reporting standard for local AppSec review. Use to s
 
 # sec-reporting
 
-Write final review reports in Polish. Keep reports concise so review effort goes into finding vulnerabilities, not producing long process documentation.
+Write final review reports in Polish by default. The report language can change only when the user prompt explicitly includes `Report Language: <language>`. Keep reports concise so review effort goes into finding vulnerabilities, not producing long process documentation.
 
 ## Result Types
 
@@ -95,6 +95,10 @@ Keep `low` and `medium` findings short. Expand mainly for `critical`, `high`, cr
 
 ## Language
 
-Use clear Polish prose. Keep English for established technical terms, standards, vulnerability classes, report field names, library/tool names, headers, configuration keys, APIs, and code identifiers.
+Default report language is `Polish`. If the user prompt does not include `Report Language`, the final report must be written in Polish. Use another narrative language only when the prompt explicitly includes `Report Language: <language>`.
+
+Regardless of narrative language, keep stable domain vocabulary in its natural form. Preserve report section and field names, standards, vulnerability classes, library/tool names, APIs, configuration keys, headers, code identifiers, file paths, symbols, routes, package names, and protocol names as they are normally used, often in English.
+
+Use clear Polish prose for the default report. Keep English for established technical terms, standards, vulnerability classes, report field names, library/tool names, headers, configuration keys, APIs, and code identifiers.
 
 Prefer natural Polish terms in explanations: `dowód`, `wpływ`, `ścieżka ryzyka`, `zalecenie`, `test regresyjny`, `uprawnienie`, `właściciel zasobu`.

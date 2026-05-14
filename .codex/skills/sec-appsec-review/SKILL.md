@@ -55,7 +55,7 @@ For Swagger/OpenAPI/ReDoc and diagnostics, confirm a `Finding` only when local c
 
 ## Output
 
-Write final review reports in Polish. Use `sec-reporting` as the only source of truth for the compact report shape; this skill orchestrates the review and does not define a separate report template:
+Write final review reports in Polish by default. If the user prompt includes `Report Language: <language>`, use that language for the narrative. Use `sec-reporting` as the only source of truth for the compact report shape and report language policy; this skill orchestrates the review and does not define a separate report template:
 
 - `Findings`: confirmed vulnerabilities or material risks.
 - `Candidate Findings`: likely vulnerabilities with local evidence but missing confirmation.
