@@ -25,7 +25,7 @@ W praktyce użytkownik podaje zakres review, wybiera głębokość i poziom ASVS
 | `Scope` | całe repo albo wskazany obszar | Część kodu objęta review. Im węższy scope, tym łatwiej o dokładniejsze prześledzenie przepływów. | całe repo, folder, aplikacja, API, moduł domenowy, backend + frontend |
 | `Review Depth` | `standard` | Głębokość review i ilość czasu wydana na śledzenie wariantów [`quick`, `standard`, `deep`]. To nie jest severity wyniku. | `standard` dla zwykłego review, `deep` dla ważnego systemu |
 | `ASVS Level` | `L2` | Poziom OWASP ASVS używany przy mapowaniu konkretnych znalezionych problemów [`L1`, `L2`, `L3`]. Nie jest checklistą sterującą całym review. | `L2` dla typowej aplikacji, `L3` dla silniejszych wymagań |
-| `Tier Scope` | bez jawnego ograniczenia | Opcjonalne ograniczenie pracy do wybranych tierów z `risk-baseline.md` [`Tier 1`, `Tier 2`, `Tier 3`]. Przydaje się przy focused review. | `Tier 1 i Tier 2` |
+| `Tier Scope` | bez jawnego ograniczenia | Opcjonalny limit pracy do wybranych tierów z `risk-baseline.md` [`Tier 1`, `Tier 2`, `Tier 3`]. Używaj tylko wtedy, gdy chcesz świadomie zawęzić review względem `Review Depth`. | `Tier 1 i Tier 2 only` |
 | `Report Language` | `Polish` | Opcjonalny parametr do świadomej zmiany języka narracji raportu. Bez tego parametru raport powstaje po polsku; nazwy pól i techniczne terminy pozostają w naturalnej formie. | `Polish`, `English` |
 | Tryb | offline | Zakłada pracę na lokalnych plikach i kontekście od użytkownika [`offline`]. Runtime, skanery i chmura zwykle trafiają do osobnego follow-up. | offline review, osobny follow-up dla runtime/skanerów/chmury |
 | `repomix` | opcjonalny | Spakowany widok repo jako pomoc w nawigacji po większym kodzie. Nie zastępuje lokalnych plików jako dowodu. | brak, istniejący output repomix |
@@ -52,7 +52,9 @@ W praktyce użytkownik podaje zakres review, wybiera głębokość i poziom ASVS
 | `Always Check` | Mała przypominajka w `always-check.md` dla oczywistych klas ryzyka, wybieranych tylko wtedy, gdy pasują do technologii, powierzchni i scope'u. |
 | `Out of Scope` | Część systemu albo klasa ryzyka poza ustalonym zakresem danego review. |
 
-`Review Depth`, `ASVS Level` i `Tier Scope` opisują różne rzeczy. `Review Depth` mówi o głębokości pracy, `ASVS Level` o poziomie mapowania standardu, a `Tier Scope` o priorytetach obszarów ryzyka. Żadne z tych pól samo nie oznacza severity. Severity wynika z wpływu, exploitability i kontekstu aplikacji.
+`Review Depth`, `ASVS Level` i `Tier Scope` opisują różne rzeczy. `Review Depth` mówi o głębokości pracy, `ASVS Level` o poziomie mapowania standardu, a `Tier Scope` jest opcjonalnym limitem obszarów ryzyka. Żadne z tych pól samo nie oznacza severity. Severity wynika z wpływu, exploitability i kontekstu aplikacji.
+
+Najczęściej wystarczy podać `Review Depth`. `Tier Scope` dodawaj tylko jako świadome zawężenie, np. gdy chcesz szybki przebieg ograniczony do `Tier 1` albo focused review bez wychodzenia poza `Tier 1` i `Tier 2`.
 
 Raport ma cztery główne typy wyników. `Finding` to wynik najmocniejszy, bo ma lokalny dowód i realistyczną ścieżkę nadużycia. `Candidate Finding` jest blisko findingu, ale brakuje jednego ważnego potwierdzenia, np. konfiguracji produkcyjnej albo reachability. `Observation` jest lżejszym sygnałem. `Follow-up` opisuje sprawdzenie, którego nie da się rozstrzygnąć z samego repo.
 
@@ -83,7 +85,7 @@ Zwróć raport po polsku z sekcjami `Findings`, `Candidate Findings`, `Observati
 Zapisz raport w `docs/appsec/{data_iso}_{aplikacja}.md`.
 ```
 
-### 2. Wskazany Scope + Tier 1 i Tier 2
+### 2. Wskazany Scope
 
 ```text
 Cel: użyj $sec-appsec-review do AppSec review wskazanego obszaru. Priorytetem jest znalezienie jak najwięcej realnych, exploitable podatności w tym zakresie.
@@ -91,13 +93,12 @@ Cel: użyj $sec-appsec-review do AppSec review wskazanego obszaru. Priorytetem j
 Scope: `<opisz scope, np. foldery, jedna aplikacja, jedno API, web app, route group, moduł domenowy albo backend project + odpowiadający frontend>`.
 Review Depth: standard
 ASVS Level: L2
-Tier Scope: Tier 1 i Tier 2
 Report Language: Polish
 Tryb: offline, bez internetu, GitHuba, SaaS, runtime access i zewnętrznych skanerów podczas zwykłego review.
 
 Stosuj lokalne instrukcje repo, takie jak `AGENTS.md`, `CLAUDE.md`, README i lokalne wskazówki. Użyj `repomix` jeśli jest dostępny, zgodny z instrukcjami repo i realnie przydatny.
 
-Priorytetyzuj pracę według tierów z baseline $sec-appsec-review, ograniczając ten przebieg do `Tier 1` i `Tier 2`.
+Priorytetyzuj pracę według tierów z baseline $sec-appsec-review, zgodnie z `Review Depth`.
 
 Nie implementuj poprawek. Raportuj tylko problemy z lokalnym dowodem i realistyczną ścieżką nadużycia jako `Findings`. Prawdopodobne podatności bez pełnego potwierdzenia przenieś do `Candidate Findings`; hardening i częściowe sygnały do `Observations`; walidacje zależne od runtime, środowiska, skanerów, chmury/SaaS albo aktualnej dokumentacji do `Follow-up`.
 
