@@ -15,7 +15,7 @@ OWASP Web Top 10:2025 and OWASP API Security Top 10:2023 are optional risk label
 - Source/version/license notes: `references/asvs-source.md`.
 - Optional helper: `scripts/asvs_lookup.py`.
 
-The dataset contains all ASVS 5.0.0 requirements in the local lookup format. Do not claim ASVS certification or use it as a checklist that drives vulnerability hunting.
+The dataset contains all ASVS 5.0.0 requirements in the local lookup format. Do not claim ASVS certification or use it as a checklist that drives vulnerability hunting; ASVS maps already-found problems, it does not decide what to hunt.
 
 ## Mapping Rules
 
@@ -31,4 +31,7 @@ The dataset contains all ASVS 5.0.0 requirements in the local lookup format. Do 
 python .codex/skills/sec-asvs-review/scripts/asvs_lookup.py --level L2 --query authorization
 python .codex/skills/sec-asvs-review/scripts/asvs_lookup.py --level L2 --query injection
 python .codex/skills/sec-asvs-review/scripts/asvs_lookup.py --level L2 --query secret
+python .codex/skills/sec-asvs-review/scripts/asvs_lookup.py --level L2 --query "internal http-based services"
 ```
+
+The helper matches all query words against local fields such as chapter, area, summary, and keywords. For service-to-service transport findings, short queries such as `internal http-based services` or `transport encryption internal` should usually map to `v5.0.0-12.3.3`; ASVS still maps already-found problems, it does not decide what to hunt.

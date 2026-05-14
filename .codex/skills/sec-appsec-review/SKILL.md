@@ -19,11 +19,11 @@ Use the local repository, host-repository instructions such as `AGENTS.md` and `
 
 ## Repository Recon
 
-Before deeper review, make a brief internal map of the repository: application type, main technologies, entry points, trust boundaries, authentication and authorization model, sensitive data, persistence, integrations, and deployment or IaC hints. Use this map only to choose relevant review paths and report context; do not turn it into long architecture documentation.
+Before deeper review, make a brief internal map of the repository: application type, main technologies, entry points, trust boundaries, authentication and authorization model, sensitive data, persistence, integrations, and deployment or IaC hints. For integrations, note outbound clients, production-like configuration, service URLs, and how service-to-service authentication is performed. Use this map only to choose relevant review paths and report context; do not turn it into long architecture documentation.
 
 ## Review Priority
 
-Use `references/risk-baseline.md` to decide work order, and `references/always-check.md` only as a tiny reminder of obvious risks that match the application, technology, exposed surfaces, and scope. Tiers prioritize review cost and expected exploitability; they are not severity labels and not ASVS levels. Prioritize confirmed, exploitable paths over broad coverage claims.
+Use `references/risk-baseline.md` to decide work order, and `references/always-check.md` only as a tiny reminder of obvious risks that match the application, technology, exposed surfaces, and scope. `risk-baseline.md` includes high-yield examples to trigger tracing, but it does not limit the review to those examples. Tiers prioritize review cost and expected exploitability; they are not severity labels and not ASVS levels. Prioritize confirmed, exploitable paths over broad coverage claims.
 
 - `Tier 1`: start with the most exploitable and usually highest-yield paths.
 - `Tier 2`: continue into important risks that need more context, cross-file tracing, or representative variants.

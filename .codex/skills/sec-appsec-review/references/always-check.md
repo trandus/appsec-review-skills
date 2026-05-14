@@ -21,6 +21,7 @@ Use this file only as a tiny reminder of obvious, high-yield checks that are eas
 
 - Credentials, API keys, tokens, connection strings, private keys, weak defaults, or production-like sample values.
 - Secrets, PII, auth headers, request bodies, stack traces in logs/errors/responses.
+- Production-like `http://` endpoints used with credentials, tokens, cookies, sensitive data, or Windows/NTLM auth.
 
 ## Public Debug Surfaces
 
