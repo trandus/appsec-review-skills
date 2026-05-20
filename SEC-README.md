@@ -4,6 +4,8 @@
 
 Ten plik jest krótkim przewodnikiem dla osoby, która chce uruchomić review albo zrozumieć wynik. Szczegółowe reguły pracy są w skillach i ich referencjach.
 
+Repozytorium zawiera też samodzielne skille `security-audit-2` i `security-audit-3`. `security-audit-2` ma własne referencje i lokalny ASVS. `security-audit-3` jest wariantem single-file bez ASVS i dodatkowych plików: priorytety, tiny always-check i format raportu są wplecione bezpośrednio w `SKILL.md`.
+
 ## Jak To Działa
 
 | Element | Rola |
@@ -11,6 +13,8 @@ Ten plik jest krótkim przewodnikiem dla osoby, która chce uruchomić review al
 | `sec-appsec-review` | Orkiestracja lokalnego review: scope, krótki recon, priorytety i evidence gate. |
 | `sec-reporting` | Kanoniczne typy wyników oraz format raportu. |
 | `sec-asvs-review` | Lokalny mapper OWASP ASVS używany po znalezieniu konkretnego problemu. |
+| `security-audit-2` | Samodzielny skill exploit-path-first: hunting i korelacja ścieżek ataku przed minimalnie wystarczającym raportem. |
+| `security-audit-3` | Samodzielny skill single-file bez ASVS: maksymalizacja skuteczności huntingu bez dodatkowych referencji i skryptów. |
 | `risk-baseline.md` | Główna, tierowana priorytetyzacja obszarów ryzyka. |
 | `always-check.md` | Mała przypominajka oczywistych ryzyk dobieranych do technologii i scope'u. |
 
@@ -32,6 +36,7 @@ W praktyce użytkownik podaje zakres review, wybiera głębokość i poziom ASVS
 | Lokalne instrukcje repo | obecne pliki instrukcji | Dodatkowy kontekst projektu, np. lokalne zasady pracy i struktura aplikacji. | `AGENTS.md`, `CLAUDE.md`, README, docs |
 | Skille | `sec-appsec-review`, `sec-reporting`, `sec-asvs-review` | Minimalny zestaw aktywny dla typowego review: prowadzenie review, raport i mapowanie ASVS. | zestaw `sec-*` |
 | Pliki wyjściowe | `docs/appsec/...` w promptach | Miejsce na zapis promptu i raportu, żeby dało się odtworzyć zakres review. | `{data_iso}_{aplikacja}-prompt.md`, `{data_iso}_{aplikacja}.md` |
+| Skill samodzielny | opcjonalnie `security-audit-2` albo `security-audit-3` | Przenośny wariant do review, gdy ważniejsza jest maksymalizacja liczby realnych exploitable podatności niż rozdzielanie pracy na kilka skilli. `security-audit-3` usuwa narzut ASVS i dodatkowych plików. | `$security-audit-2`, `$security-audit-3` |
 
 `standard` i `L2` są dobrym punktem startowym dla zwykłej aplikacji biznesowej. `quick` pasuje do szybkiego przeglądu albo małego scope'u. `deep` pasuje do ważnego systemu, większego ryzyka albo drugiego przejścia po kodzie. `L3` ma sens przy silniejszych wymaganiach bezpieczeństwa albo sweepie architektonicznym.
 
@@ -128,6 +133,37 @@ Zwróć raport po polsku z sekcjami `Findings`, `Candidate Findings`, `Observati
 
 Zapisz raport w `docs/appsec/{data_iso}_{aplikacja}.md`.
 Zapisz użyty prompt w `docs/appsec/{data_iso}_{aplikacja}-prompt.md`.
+```
+
+### 4. Samodzielny Hunting `security-audit-2`
+
+```text
+Użyj $security-audit-2 do lokalnego AppSec review tego repozytorium.
+
+Scope: całe repo.
+Review Depth: standard
+ASVS Level: L2
+Tryb: offline, bez internetu, GitHuba, SaaS, runtime access i zewnętrznych skanerów.
+
+Priorytetem jest skuteczne znalezienie jak największej liczby realnych, exploitable podatności. Najpierw hunting i korelacja ścieżek ataku, potem minimalnie wystarczający raport.
+
+Zapisz zwięzły raport z `Findings`, `Candidate Findings`, `Observations` i `Follow-up` domyślnie jako `security-audit-2-<YYYY-MM-DD-HHmm>.md`.
+W czacie zwróć tylko ścieżkę raportu i liczniki wyników.
+```
+
+### 5. Samodzielny Hunting Bez ASVS `security-audit-3`
+
+```text
+Użyj $security-audit-3 do lokalnego AppSec review tego repozytorium.
+
+Scope: całe repo.
+Review Depth: standard
+Tryb: offline, bez internetu, GitHuba, SaaS, runtime access i zewnętrznych skanerów.
+
+Priorytetem jest skuteczne znalezienie jak największej liczby realnych, exploitable podatności. Nie wykonuj ASVS ani mapowania standardów; cały budżet poza krótkim raportem przeznacz na hunting i korelację ścieżek ataku.
+
+Zapisz zwięzły raport z `Findings`, `Candidate Findings`, `Observations` i `Follow-up` domyślnie jako `security-audit-3-<YYYY-MM-DD-HHmm>.md`.
+W czacie zwróć tylko ścieżkę raportu i liczniki wyników.
 ```
 
 ## Źródła I Odświeżanie

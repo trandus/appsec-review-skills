@@ -1,0 +1,4 @@
+interface:
+  display_name: "Security Audit 3"
+  short_description: "Single-file exploit-first AppSec review."
+  default_prompt: "Użyj $security-audit-3 do lokalnego AppSec review tego repozytorium. Priorytetem jest skuteczne znalezienie exploitable podatności; zapisz zwięzły raport z Findings, Candidate Findings, Observations i Follow-up bez ASVS."
