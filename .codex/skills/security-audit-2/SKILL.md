@@ -31,6 +31,7 @@ Identify:
 - entry points such as HTTP routes, RPC handlers, message consumers, cron jobs, CLI commands, file watchers, webhooks, admin panels, and generated docs;
 - trust boundaries and all places where untrusted input enters the system;
 - authentication, authorization, ownership, tenant, organization, and role boundaries;
+- public, anonymous, semi-public, invite, tokenized-link, share-link, and lookup flows, especially where they resolve private objects or relationships;
 - sensitive data, secrets, tokens, credentials, financial or regulated data, and high-impact operations;
 - persistence, caches, queues, object storage, files, and search indexes;
 - external integrations, outbound HTTP clients, webhooks, identity providers, brokers, cloud services, and service-to-service authentication;

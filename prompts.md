@@ -1,7 +1,7 @@
-## Prompt porównania roportów
+## Prompt porównania raportów
 
 ```
-Porównaj dwa załączone raporty bezpieczeństwa IT / AppSec dotyczące tej samej aplikacji.
+Porównaj załączone raporty bezpieczeństwa IT / AppSec dotyczące tej samej aplikacji.
 
 Cel:
 Chcę ocenić nie tylko liczbę znalezionych problemów, ale też jakość raportu, kompletność analizy, wartość dowodową i przydatność do dalszych działań developerskich/security.
@@ -10,7 +10,19 @@ Raporty oznacz jako:
 - Raport A
 - Raport B
 - Raport n (dla kolejnych, jeżeli występują)
-Wstaw tablelce przypisanie nazwa raportu -> oznaczenie raportu
+Wstaw w tabelce przypisanie nazwa raportu -> oznaczenie raportu.
+
+Na początku odpowiedzi, przed werdyktem jakościowym, pokaż tabelę porównawczą z liczbą wpisów w każdym raporcie:
+
+| Raport | Findings | Candidate Findings | Observations | Follow-up | Razem wpisów | Uwagi |
+|---|---:|---:|---:|---:|---:|---|
+| Raport A | 5 | 1 | 2 | 4 | 12 | Najpełniejszy operacyjnie; dobre remediation i testy regresji. |
+
+Zasady tabeli ilościowej:
+- policz oddzielnie `Findings`, `Candidate Findings`, `Observations` i `Follow-up`,
+- `Razem wpisów` to suma tych czterech kategorii,
+- jeżeli raport nie używa dokładnie tych nazw sekcji, dopasuj kategorie po sensie i zaznacz to w `Uwagach`,
+- jeżeli liczby nie da się wiarygodnie ustalić, wpisz `n/d` i krótko wyjaśnij dlaczego w `Uwagach`.
 
 Nie zakładaj, że dłuższy raport jest lepszy. Oceń merytorycznie.
 

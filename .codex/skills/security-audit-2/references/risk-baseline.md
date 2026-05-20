@@ -8,8 +8,8 @@ The examples below are not exhaustive. Treat them as triggers for tracing and co
 
 Start here. These are usually the most exploitable and most cost-effective paths to trace in a local review.
 
-- Access control and authorization boundaries: missing auth/authz, IDOR/BOLA, tenant escape, wrong-role access, forced browsing, frontend-only controls. Correlate route exposure, middleware, policy checks, object lookup filters, and caller-controlled identifiers.
-- Business workflow authorization: owner, tenant, role, approval, quota, state transition, and server-side context checks around operations that change state or grant access. Correlate the workflow state machine, trusted server-side state, replay/duplicate handling, and side effects.
+- Access control and authorization boundaries: missing auth/authz, IDOR/BOLA, tenant escape, wrong-role access, forced browsing, frontend-only controls. Correlate route exposure, middleware, policy checks, object lookup filters, caller-controlled identifiers, public slugs, invite codes, tokenized links, and anonymous lookup flows that resolve private objects or relationships.
+- Business workflow authorization: owner, tenant, role, approval, quota, state transition, and server-side context checks around operations that change state or grant access. Correlate the workflow state machine, trusted server-side state, replay/duplicate handling, side effects, and whether public or anonymous steps expose only the intended public view of recipients, destinations, profiles, payout/payment targets, integration settings, or workflow configuration.
 - Auth, session, token, and identity flows: JWT/OAuth/OIDC validation, cookies, reset/invite/magic-link flows, privilege changes, stale access, cached authorization decisions. Correlate issuer/audience/lifetime checks, key selection, session invalidation, privilege transitions, and recovery or invitation paths.
 - Injection and unsafe sinks: SQL/NoSQL/LDAP, command/process, template/expression, unsafe deserialization, XXE, redirects, header/log injection. Correlate input sources, validation/encoding layers, query builders or shell wrappers, parser settings, and reachable sinks.
 - XSS and unsafe rendering: DOM sinks, templates, raw HTML, Markdown/rich text, context mistakes, sanitizer bypass APIs.
@@ -24,7 +24,7 @@ Continue here for standard review coverage and representative deeper traces.
 
 - Destructive or high-impact operations: delete, revoke, refund, payout, transfer, publish, permission changes, replay, duplicate submission, race, TOCTOU, missing idempotency, weak audit. Correlate command handlers, transaction boundaries, queues/jobs, external callbacks, and audit records.
 - Client-trust and workflow bypass: server trusting client-supplied price, role, owner, tenant, status, limits, approvals, or next-step values instead of trusted state. Correlate request DTOs, hidden fields, frontend-derived values, server recalculation, and persistence updates.
-- Sensitive data exposure: responses, logs, telemetry, errors, exports, caches, bundles, files, broad roles, deletion gaps.
+- Sensitive data exposure: responses, logs, telemetry, errors, exports, caches, bundles, files, broad roles, deletion gaps, and business-private metadata such as recipients, destinations, payout/payment targets, contact channels, integration configuration, preferences, or relationship mappings exposed outside their intended authorization context.
 - Browser-auth controls: CSRF, CORS, SameSite/Secure/HttpOnly, cache headers, state-changing GETs.
 - Dependency and supply-chain risk: lockfiles, broad versions, package sources, dependency confusion, package scripts, containers, CI actions, vulnerable components confirmed by local/tool evidence.
 - Abuse and resource consumption: enumeration, spam, brute force, expensive operations, integration fan-out, account/token workflows, queue/event amplification.

@@ -32,6 +32,7 @@ Identify:
 - entry points such as HTTP routes, RPC handlers, message consumers, cron jobs, CLI commands, file watchers, webhooks, admin panels, API docs, and diagnostics;
 - trust boundaries and all places where untrusted input enters the system;
 - authentication, authorization, ownership, tenant, organization, role, approval, and workflow boundaries;
+- public, anonymous, semi-public, invite, tokenized-link, share-link, and lookup flows, especially where they resolve private objects or relationships;
 - sensitive data, secrets, tokens, credentials, financial or regulated data, and high-impact operations;
 - persistence, caches, queues, object storage, files, search indexes, and generated artifacts;
 - external integrations, outbound HTTP clients, webhooks, identity providers, brokers, cloud services, and service-to-service authentication;
@@ -49,8 +50,8 @@ The examples below are triggers for tracing and correlation, not a checklist cat
 
 Prioritize these paths first:
 
-- Access control and authorization boundaries: missing auth/authz, IDOR/BOLA, tenant escape, wrong-role access, forced browsing, frontend-only controls. Correlate route exposure, middleware, policy checks, object lookup filters, and caller-controlled identifiers.
-- Business workflow authorization: owner, tenant, role, approval, quota, state transition, and server-side context checks around operations that change state or grant access. Correlate state machines, trusted server-side state, replay/duplicate handling, and side effects.
+- Access control and authorization boundaries: missing auth/authz, IDOR/BOLA, tenant escape, wrong-role access, forced browsing, frontend-only controls. Correlate route exposure, middleware, policy checks, object lookup filters, caller-controlled identifiers, public slugs, invite codes, tokenized links, and anonymous lookup flows that resolve private objects or relationships.
+- Business workflow authorization: owner, tenant, role, approval, quota, state transition, and server-side context checks around operations that change state or grant access. Correlate state machines, trusted server-side state, replay/duplicate handling, side effects, and whether public or anonymous steps expose only the intended public view of recipients, destinations, profiles, payout/payment targets, integration settings, or workflow configuration.
 - Auth, session, token, and identity flows: JWT/OAuth/OIDC validation, cookies, reset/invite/magic-link flows, privilege changes, stale access, cached authorization decisions. Correlate issuer/audience/lifetime checks, key selection, session invalidation, privilege transitions, and recovery or invitation paths.
 - Injection and unsafe sinks: SQL/NoSQL/LDAP, command/process, template/expression, unsafe deserialization, XXE, redirects, header/log injection. Correlate input sources, validation/encoding layers, query builders or shell wrappers, parser settings, and reachable sinks.
 - XSS and unsafe rendering: DOM sinks, templates, raw HTML, Markdown/rich text, context mistakes, sanitizer bypass APIs.
@@ -65,7 +66,7 @@ Use these after Tier 1 or when they are directly visible in scope:
 
 - Destructive or high-impact operations: delete, revoke, refund, payout, transfer, publish, permission changes, replay, duplicate submission, race, TOCTOU, missing idempotency, weak audit. Correlate command handlers, transaction boundaries, queues/jobs, external callbacks, and audit records.
 - Client-trust and workflow bypass: server trusting client-supplied price, role, owner, tenant, status, limits, approvals, or next-step values instead of trusted state. Correlate request DTOs, hidden fields, frontend-derived values, server recalculation, and persistence updates.
-- Sensitive data exposure: responses, logs, telemetry, errors, exports, caches, bundles, files, broad roles, deletion gaps.
+- Sensitive data exposure: responses, logs, telemetry, errors, exports, caches, bundles, files, broad roles, deletion gaps, and business-private metadata such as recipients, destinations, payout/payment targets, contact channels, integration configuration, preferences, or relationship mappings exposed outside their intended authorization context.
 - Browser-auth controls: CSRF, CORS, SameSite/Secure/HttpOnly, cache headers, state-changing GETs.
 - Dependency and supply-chain risk: lockfiles, broad versions, package sources, dependency confusion, package scripts, containers, CI actions, vulnerable components confirmed by local/tool evidence.
 - Abuse and resource consumption: enumeration, spam, brute force, expensive operations, integration fan-out, account/token workflows, queue/event amplification.
@@ -87,7 +88,7 @@ Use this tier when `Review Depth` is `deep`, when the architecture has a matchin
 
 Use this only to avoid missing obvious high-yield issues while hunting deeper paths. Pick only areas that match the audited technology, scope, and exposed surface. Do not report anything from this reminder without a concrete local evidence path and realistic abuse scenario.
 
-- Access control and workflows: missing auth on public routes, APIs, files, admin/debug panels; missing owner, tenant, organization, role, approval, state-transition checks; IDOR/BOLA.
+- Access control and workflows: missing auth on public routes, APIs, files, admin/debug panels; missing owner, tenant, organization, role, approval, state-transition checks; IDOR/BOLA; public, anonymous, invite, share-link, or lookup flows exposing private recipient, destination, profile, payout/payment target, integration, or relationship metadata without a clear public contract.
 - Unsafe input to sinks: SQL/NoSQL/LDAP/query, command, template/expression, path traversal, unsafe redirect; SSRF, unsafe file import/export/archive handling, attacker-controlled outbound URLs.
 - Browser and rendering: reflected, stored, or DOM XSS through raw HTML, Markdown/rich text, or missing encoding/sanitization; CSRF, unsafe CORS, and weak sensitive-cookie flags on browser-auth flows.
 - Secrets and sensitive data: credentials, API keys, tokens, connection strings, private keys, weak defaults, production-like sample values; secrets, PII, auth headers, request bodies, stack traces in logs/errors/responses; production-like `http://` endpoints used with credentials, tokens, cookies, sensitive data, or Windows/NTLM auth.
@@ -169,4 +170,3 @@ Expand mainly for `critical`, `high`, access control, tenant escape, injection/R
 - `high`: auth bypass, serious privilege escalation, arbitrary file read/write, SSRF to sensitive internal/cloud targets, exploitable injection with sensitive data access or command execution, serious secret exposure, or cross-tenant access.
 - `medium`: constrained exploitability, limited sensitive data exposure, authenticated abuse with meaningful impact, or misconfiguration with realistic but bounded risk.
 - `low`: plausible but limited impact, unusual preconditions, or defense-in-depth weakness with a credible abuse scenario.
-

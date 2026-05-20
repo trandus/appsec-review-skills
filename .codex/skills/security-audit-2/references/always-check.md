@@ -5,7 +5,8 @@ Use this file only as a tiny reminder of obvious, high-yield checks that are eas
 ## Access Control And Workflows
 
 - Missing auth on public routes, APIs, files, admin/debug panels.
-- Missing owner, tenant, organization, role, approval, state-transition checks, IDOR/BOLA
+- Missing owner, tenant, organization, role, approval, state-transition checks, IDOR/BOLA.
+- Public, anonymous, invite, share-link, or lookup flows that expose private recipient, destination, profile, payout/payment target, integration, or relationship metadata without a clear public contract.
 
 ## Unsafe Input To Sinks
 
