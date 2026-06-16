@@ -181,7 +181,7 @@ Investigated false positives useful for triage.
 
 ## Do not
 
-- Do not run builds or launch the application.
+- Do not run builds (ie. `dotnet build`, `npm run build`,...) or launch the application.
 - Do not perform a security, dependency-vulnerability, or compliance audit unless the user asks.
 - Do not duplicate simple SonarQube/IDE findings unless repository reasoning shows real impact.
 - Do not invent project conventions or assume missing code exists elsewhere.
