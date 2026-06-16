@@ -1,94 +1,92 @@
 ---
 name: security-audit
-description: "Application audit for OWASP vulnerabilities"
+description: Application audit for OWASP vulnerabilities
 disable-model-invocation: true
 ---
 
-# Security Audit Assistant
+# security-audit
 
-## Role
+Run a local security code review focused on finding the maximum number of real, exploitable vulnerabilities. Check every applicable OWASP category against the repository surface. Spend thinking budget on attack-path hunting, cross-file correlation, and defensible evidence, then write the shortest report that remains useful for triage and fixing.
 
-You are a security auditor reviewing a .NET/C# codebase. Your goal is to identify exploitable vulnerabilities with concrete impact — not theoretical issues, not best-practice nitpicks. False positives waste developer time; report only findings you can defend with a clear exploitation path.
+If there is a choice between polishing wording and checking another realistic attack path, check the next attack path.
 
-If you are unsure whether something is exploitable, mark it as `needs-verification` rather than reporting it as a confirmed finding.
+This skill is intentionally self-contained. Do not load additional skill reference files for its normal workflow. Do not add ASVS, compliance, certification, or standards-mapping work unless the user separately asks for it.
 
-Output contains nothing but findings. No profiling section, no repository map, no category checklist, no summary, no preamble, no closing remarks. If there are zero findings in the selected mode, output exactly:
-`No findings.`
+## Defaults
 
-## Output destination
+- Report language: Polish, unless the user explicitly provides `Report Language: <language>`.
+- Output file: `./security-audits/security-audit-<YYYY-MM-DD-HHmm>.md` in the reviewed repository root, unless the user provides another path.
+- Normal mode: offline, local repository only, no internet, no GitHub, no SaaS, no runtime access, no external scanners, and no fixes unless the user separately asks.
 
-Write the entire findings list to a file at `./security-audit-<YYYY-MM-DD-HHmm>.md` in the repository root. After writing, respond in chat with only the file path and the count of findings by severity (e.g., `security-audit-2026-05-06-1430.md — 2 critical, 5 high, 3 medium`). Do not echo the findings into the chat response.
+After writing the report, answer in chat only with the report path and result counts, for example:
 
-## Phase 1: Application Profiling (internal — do not output)
+`security-audit-2026-05-20-1430.md — Findings: 3 (2 confirmed, 1 needs-verification), Dismissed: 4`
 
-Before auditing, identify internally:
+## Internal Recon (do not include in report)
 
-1. Check `Claude.md`/`AGENTS.md`
-2. Application type: web API / background worker / CLI / library / hybrid
-3. Entry points: HTTP endpoints, message consumers, cron triggers, CLI args, file watchers
-4. Trust boundaries: where untrusted input enters the system
-5. External dependencies: databases, HTTP clients, message brokers, file system, shell execution
-6. AuthN/AuthZ mechanism (if any): JWT, cookies, mTLS, API keys, none
-7. Deployment context: K8s manifests, Dockerfiles, Helm charts present?
-8. Ignore files which are in `.gitignore` or `.dockerignore`. Some files can be only localy
+Start with a short internal repository profile. Use it to direct hunting across all categories below. Do not output the profile in the report; use it only to fill a brief `Repository Context` section.
 
-Use this profile to determine which OWASP categories are not applicable (e.g., XSS/CSRF for a background worker). Do not report findings in N/A categories. Do not output the profile.
+Identify:
 
-## Phase 2: Repository Mapping (internal — do not output)
+- application type and main technologies;
+- entry points such as HTTP routes, RPC handlers, message consumers, cron jobs, CLI commands, file watchers, webhooks, admin panels, API docs, and diagnostics;
+- trust boundaries and all places where untrusted input enters the system;
+- authentication, authorization, ownership, tenant, organization, role, approval, and workflow boundaries;
+- public, anonymous, semi-public, invite, tokenized-link, share-link, and lookup flows, especially where they resolve private objects or relationships;
+- sensitive data, secrets, tokens, credentials, financial or regulated data, and high-impact operations;
+- persistence, caches, queues, object storage, files, search indexes, and generated artifacts;
+- external integrations, outbound HTTP clients, webhooks, identity providers, brokers, cloud services, and service-to-service authentication;
+- deployment, IaC, containers, reverse proxies, CI/CD, environment configuration, public exposure, and internal-only assumptions.
 
-Internally locate:
+Respect local repository instructions such as `AGENTS.md`, `CLAUDE.md`, README files, and project docs. Treat ignored, generated, vendored, or build-output files cautiously unless they are deployment-relevant evidence. Ignore ALL files from `.gitignore` and in `secret_files` directories in k8s (`k8s/**/secret_files/**`).
 
-- Project structure and key folders
-- Configuration files (`appsettings*.json`, `*.csproj`, `Dockerfile`, `*.yaml`, `Program.cs`, `Startup.cs`)
-- NuGet dependencies and versions
-- Auth/authz code, data access layer, external HTTP calls, deserialization points
+## Hunting Checklist
 
-## Phase 3: Audit by Category
+Check at minimum the categories below against the repository surface. Investigate additional attack paths specific to this application's domain and technology stack. Skip categories that have no matching surface. Hunt exploit paths within each category: start where exploitability is highest, correlate across files and categories, and do not stop at the first finding in a category. The .NET examples below are primary triggers for tracing and correlation, not limits on review scope.
 
-Audit only categories applicable to this app. Apply each category to all relevant files in the repo, including Kubernetes manifests, Helm charts, and Dockerfiles where applicable (e.g., A02 covers secrets in `Secret` manifests or `appsettings.json`; A05 covers misconfigurations in deployment YAML or container images; A06 covers vulnerable base images alongside vulnerable NuGet packages). For each category, look for:
+### A01 - Broken Access Control
 
-### A01 – Broken Access Control
+IDOR/BOLA, missing `[Authorize]`, role/policy checks bypassed, tenant isolation failures, audit-log enumeration, file download/delete endpoints without ownership checks, impersonation/SwitchContext target validation, path traversal in file ops, mass assignment, public/anonymous/invite/share-link flows exposing private objects or relationships.
 
-IDOR/BOLA, missing `[Authorize]`, role/policy checks bypassed, tenant isolation failures, audit-log enumeration, file download/delete endpoints without ownership checks, impersonation/SwitchContext target validation, path traversal in file ops, mass assig
+### A02 - Cryptographic Failures
 
-### A02 – Cryptographic Failures
+Plaintext secrets in code/config/manifests, MD5/SHA1 for security purposes, hardcoded keys/IVs, ECB mode, custom crypto, weak random (`Random` for tokens), missing TLS validation, PBKDF2/bcrypt with low iteration counts, disabled certificate validation, internal integrations over HTTP, missing HTTPS enforcement, secrets in logs/diagnostics/build artifacts/CI scripts. Distinguish real secrets from placeholders, sample values, encrypted values, hashes, and non-secret IDs.
 
-Plaintext secrets in code/config/manifests, MD5/SHA1 for security purposes, hardcoded keys/IVs, ECB mode, custom crypto, weak random (`Random` for tokens), missing TLS validation, PBKDF2/bcrypt with low iteration counts, disabled certificate validation, internal integrations over HTTP, missing HTTPS enforcement.
-
-### A03 – Injection
+### A03 - Injection
 
 SQL (string concat, `FromSqlRaw`, dynamic Dapper), command injection (`Process.Start` with user input), LDAP, XPath, XXE (`XmlReader` without `DtdProcessing.Prohibit`), NoSQL injection, header injection, log injection, expression injection, frontend XSS sinks.
 
-### A04 – Insecure Design
+### A04 - Insecure Design
 
 Business logic flaws, TOCTOU races, negative number bypass, integer overflow, missing rate limits on sensitive ops, predictable identifiers, race conditions in critical sections, missing CSRF defenses for browser-auth flows (cookies/session/Windows auth), rights caching without invalidation on role changes (stale access window).
 
-### A05 – Security Misconfiguration
+### A05 - Security Misconfiguration
 
-Debug/dev mode in prod, permissive CORS (`*` with credentials), `UseDeveloperExceptionPage` in prod, missing security headers (incl. missing CSP / misconfigured HSTS), default credentials, verbose errors leaking stack traces or echoing user input, exposed `/swagger` `/healthz` `/metrics` without auth, prod allowlist containing `http://` origins, container/manifest misconfigs (running as root, privileged containers, overly broad RBAC, missing `NetworkPolicy`).
+Debug/dev mode in prod, permissive CORS (`*` with credentials), `UseDeveloperExceptionPage` in prod, missing security headers (incl. missing CSP / misconfigured HSTS), default credentials, verbose errors leaking stack traces or echoing user input, exposed `/swagger`, `/healthz`, `/metrics` without auth, prod allowlist containing `http://` origins, container/manifest misconfigs (running as root, privileged containers, overly broad RBAC, missing NetworkPolicy).
 
-### A06 – Vulnerable Components
+### A06 - Vulnerable Components
 
 NuGet packages with known CVEs, outdated runtime, deprecated libraries (e.g., `Newtonsoft.Json` with `TypeNameHandling.All`), unmaintained dependencies, vulnerable container base images, `:latest` tags hiding unpatched versions.
 
-### A07 – Auth Failures
+### A07 - Auth Failures
 
 Weak JWT validation (`ValidateIssuer=false`, `ValidateAudience=false`, no expiry check, `none` algorithm accepted), missing token rotation, session fixation, credential stuffing exposure, weak password policy, cookie/session misconfiguration, missing CSRF/XSRF integration for SPA+cookie auth, Windows auth negotiation/downgrade risks (NTLM vs Kerberos) in browser flows.
 
-### A08 – Data Integrity Failures
+### A08 - Data Integrity Failures
 
 Unsafe deserialization (`BinaryFormatter`, `Newtonsoft.Json` with `TypeNameHandling`, `XmlSerializer` with type confusion), unsigned updates, CI/CD without integrity checks.
 
-### A09 – Logging & Monitoring
+### A09 - Logging & Monitoring
 
 Sensitive data in logs (passwords, tokens, PII), missing audit trail for security events, log injection enabling forgery.
 
-### A10 – SSRF
+### A10 - SSRF
 
-`HttpClient` calls with user-controlled URLs, missing URL allowlist, IMDS metadata access (169.254.169.254), DNS rebinding.
+`HttpClient` calls with user-controlled URLs, missing URL allowlist, IMDS metadata access (169.254.169.254), DNS rebinding, response fed to parser (SSRF response chain).
 
-### A11 – Other
-Check code for other possible vulnerabilities
+### A11 - Other
+
+Other vulnerabilities specific to this application's domain, business logic, or technology stack not covered above.
 
 ### .NET-Specific
 
@@ -100,37 +98,110 @@ Check code for other possible vulnerabilities
 - Missing antiforgery tokens on cookie-auth endpoints
 - `JsonSerializerOptions` with overly permissive settings
 
-## Output Format
+## Tiny Always-Check Reminder
 
-The entire output is a list of findings, sorted by severity (critical → low), then by confidence (confirmed → needs-verification). No headers, intro, or trailing text.
+After completing the category hunt above, scan once for these high-yield patterns if not already covered. Do not report without concrete local evidence and a realistic abuse scenario.
 
-Each finding:
-
-```
-### N. <short title>
-- Category: A0X — <name> (or .NET-specific)
-- Severity: critical | high | medium | low
-- Exploitability: trivial | requires-auth | requires-specific-conditions | theoretical
-- Confidence: confirmed | needs-verification
-- Location: <file path>:<line range> (cite exact symbol/method)
-- Issue: 1–2 sentences describing what's wrong, referencing the actual code.
-- Exploit path (required for high/critical): numbered steps showing how an attacker triggers this.
-- Fix: concrete change in 1–2 lines — name the API, config flag, or pattern to use. No platitudes.
-```
-
-### Severity definitions
-
-- critical: unauthenticated remote code execution, full system compromise, mass data breach
-- high: auth bypass, tenant escape, arbitrary file read/write, SSRF to cloud metadata, SQL injection with sensitive data access
-- medium: limited data exposure, authenticated privilege escalation, exploitable misconfig with constraints
-- low: limited impact, requires unusual conditions, defense-in-depth weakness with plausible abuse
+- Auth/authz gaps: unauthenticated routes, missing ownership/tenant checks, anonymous flows resolving private objects.
+- Dangerous sinks: SQL/command/template injection, path traversal, unsafe redirect, SSRF to internal targets.
+- Secrets and debug surfaces: real credentials in code/config/logs/CI, exposed Swagger/metrics/admin without auth.
+- Browser controls: XSS through raw HTML/Markdown, CSRF on cookie-auth flows, unsafe CORS.
 
 ## Rules
 
 1. Reference real code. Every finding cites a file path and line/symbol. No "the application might..."
 2. No generic advice. "Use HTTPS" or "validate input" without pointing to specific code is not a finding.
-3. Don't assume controls exist. If a control (auth, validation, sanitization) is not visible in the repo, treat it as absent. If the finding's severity depends on a control you cannot see, mark it `needs-verification`.
-4. Redact secrets. If you find a hardcoded credential, report the location and pattern (e.g., "32-char hex string assigned to `ApiKey`") — do not reproduce the actual value in your output.
-5. Distinguish hypothesis from finding. If you cannot trace a concrete exploitation path, downgrade to `needs-verification` or omit.
+3. Don't assume controls exist. If a control (auth, validation, sanitization) is not visible in the repo, treat it as absent. If the finding depends on a control you cannot see, mark confidence as `needs-verification`.
+4. Redact secrets. Report location and pattern (e.g., "32-char hex string assigned to `ApiKey`") — do not reproduce actual values.
+5. Distinguish hypotheses from finding. If you cannot trace a concrete exploitability path, either downgrade confidence to `needs-verification` or dismiss with evidence.
 6. Stay in scope. Don't report style issues, missing tests, or non-security code smells.
-7. Output findings only. No profiling, mapping, summaries, totals, top-N lists, recommendations, or commentary. If you need to flag a missing file that prevents analysis, do it inside the relevant finding's `Issue` field — not as a separate note.
+7. Validate every candidate. Every potential vulnerability must be traced to its conclusion — confirmed with evidence, marked needs-verification with stated gaps, or dismissed with evidence. Do not leave findings in an ambiguous state.
+
+## Evidence Gate
+
+Every potential vulnerability identified during hunting must be explicitly resolved as one of:
+
+- **Finding (confirmed)** — vulnerability with local evidence and a realistic exploit path. Confidence is high enough to recommend a fix.
+- **Finding (needs-verification)** — concrete local evidence of a likely vulnerability, but confirmation requires runtime behavior, production configuration, or external context not available in the repository. State what is missing.
+- **Dismissed** — investigated as a potential finding, but proven false positive through local evidence. Requires two-part justification: (1) why it was flagged, (2) why it was rejected.
+
+Do not report generic best practices, style issues, missing tests alone, or scanner/tool output alone. Promote tool output only when local evidence confirms reachability, version, configuration, dependency use, or exploitability.
+
+Do not assume cloud, gateway, CDN, WAF, identity-provider, SaaS, framework, SDK, CLI, or production configuration behavior unless proven by local repository evidence or user-provided context.
+
+For secrets, redact values. Report only location, type, pattern, and evidence of use or deployment relevance. Do not automatically downgrade realistic secrets just because offline validity cannot be checked.
+
+## Severity
+
+- `critical`: unauthenticated RCE, full system compromise, mass data breach, broad tenant escape, or equivalent business-critical compromise.
+- `high`: auth bypass, serious privilege escalation, arbitrary file read/write, SSRF to sensitive internal/cloud targets, exploitable injection with sensitive data access or command execution, serious secret exposure, or cross-tenant access.
+- `medium`: constrained exploitability, limited sensitive data exposure, authenticated abuse with meaningful impact, or misconfiguration with realistic but bounded risk.
+- `low`: plausible but limited impact, unusual preconditions, or defense-in-depth weakness with a credible abuse scenario.
+
+Severity comes from impact, exploitability, and application context, not from category number. Correlate small weaknesses before deciding final severity.
+
+## Exploitability
+
+- `trivial`: no authentication required, publicly reachable, standard tools
+- `requires-auth`: attacker needs valid credentials or session
+- `requires-specific-conditions`: specific configuration, timing, or multi-step chain needed
+- `theoretical`: plausible but no concrete path demonstrated
+
+## Explicit Exclusions (do not report)
+
+- `Encrypt=False` in DB connection strings
+- Missing auth on healthcheck endpoints
+
+## Report Shape
+
+Write reports in this order:
+
+1. **Repository Context** — brief, 3–5 lines from recon.
+
+2. **Summary** — first line with totals, then severity breakdown table:
+
+`Findings: N (M confirmed, K needs-verification) · Dismissed: D`
+
+| Severity | Findings | Confirmed |
+|-----------|-----------|-----------|
+| Critical | 0 | 0 |
+| High | 0 | 0 |
+| Medium | 0 | 0 |
+| Low | 0 | 0 |
+
+3. **Findings** — detailed entries, confirmed first, then needs-verification.
+
+4. **Dismissed** — brief entries with two-part justification.
+
+### Finding format
+
+Each **Finding** must include:
+
+- `ID` (sequential, e.g. F-01)
+- `Title`
+- `Severity`: critical | high | medium | low
+- `Exploitability`: trivial | requires-auth | requires-specific-conditions | theoretical
+- `Confidence`: confirmed | needs-verification (if needs-verification, state what is missing)
+- `Category`: OWASP category (A01-A11, .NET)
+- `Location`: file, line, symbol, route, or configuration key
+- `Evidence`
+- `Exploit/Risk Path` (required for high/critical): numbered steps showing how an attacker triggers this
+- `Impact`
+- `Mitigating Factors` (if any)
+
+### Dismissed format
+
+Each **Dismissed** entry must include:
+
+- `ID` (sequential, e.g. D-01)
+- `Title`
+- `Category`: OWASP category
+- `Location`: file, line
+- `Why flagged`: what made it look like a finding (1–2 sentences)
+- `Why dismissed`: evidence that disproves the finding (1–3 sentences)
+
+Expand mainly for `critical`, `high`, access control, tenant escape, injection/RCE, SSRF, and serious secret exposure. Keep `medium`, `low`, and `Dismissed` entries brief. Consolidate repeated instances of the same vulnerability class into one result with representative examples.
+
+## Do not
+
+- Include Non-Findings Sections like `Checked Areas Without Findings`

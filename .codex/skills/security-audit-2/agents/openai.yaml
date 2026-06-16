@@ -1,4 +1,0 @@
-interface:
-  display_name: "Security Audit 2"
-  short_description: "Exploit-path-first local AppSec review."
-  default_prompt: "Użyj $security-audit-2 do lokalnego AppSec review tego repozytorium. Priorytetem jest skuteczne znalezienie exploitable podatności; zapisz zwięzły raport z Findings, Candidate Findings, Observations i Follow-up."
