@@ -1,0 +1,107 @@
+to mam taki szkielat skilla:
+
+---
+
+name: quality-audit
+
+description: Application quality audit for architecture, code quality, bugs, performance, tests, logging, maintainability, refactoring areas, priorities, and technical debt
+
+disable-model-invocation: true
+
+---
+
+
+
+# quality-audit
+
+
+
+Skeleton for the stage 2 application quality audit skill.
+
+
+
+This skill will cover the `zad. 2` scope from `Wymagania_Etap_2.md`.
+
+
+
+## Scope
+
+
+
+- Application structure and architecture analysis
+
+- Source code quality assessment
+
+- Potential bugs and antipatterns
+
+- Performance issues
+
+- Test quality
+
+- Error handling and logging mechanisms
+
+- Quick wins
+
+- Technical application summary
+
+- Improvement recommendations
+
+- Technical priorities
+
+- Refactoring areas
+
+- Technical debt estimate
+
+
+
+## Status
+
+
+
+Draft skeleton only. Full workflow, report shape, evidence rules, and output defaults are intentionally not defined yet.
+
+
+
+teraz trzeba go rozwinać, ale, najważniejszym celem jest jak najlepsze skonowanie repozytoriów z aplikacjami.
+
+Mamy głownie aplikacje .net 8/10 i jakis frontend (nie zawsze), ale nie chodzi o ograniczanie. Generalnie skill powinien wskazywać kierunki w jakim ma iść skanowanie, ale nie może być zbyt precyzyjny bo to zawęzi obszar poszukiwań do jakiś list, można natomiast dodać jaiś zakres absolutnie niezbędnych weryfikacji z wyraźnym zaznaczeniem, ze to tylko list maus have, ale żeby się absolutnie do niej nie ograniczał.
+
+na pewno trzeba sprawdzać czy sa przestrzegane dobre praktyki, czy są stosowane najlepsze wzorce itp.
+
+Weryfikacja poziomu severity tez musi być na podstawie rzeczywistego zagrozenia, a anie tego czy jest np. ładanie.
+
+Ttzeba tez zwócić uwagę, że luki bezieczeństwa nie wchodzą w zakrest tego skanowania, choć nie mzoe być to zbyt sztywne żeby też nie ograniczać skanowania, szczególnie jeżeli jest to wspólny obszar, to nie mzoe być wykluczony, to ograniczenie ma być jako sugestia, to samo dotyczy obszarów które pokrywają skany sonar qube, np. duplikacji kodu, zbyt złożonych metod itp, ale tu tez oczywiscie jako sugestia.
+
+Skanowane ma być całe Repo, chyba ze w prompt user poda inaczej.
+
+
+
+Przeanalizuja dokumenatcję codex i claude code żebyś wiedział jak pisac takie skille, trzymaj sie wytycznych, możesz tez przejrzeć neta w poszukiwaniu podobnych skilli i sie na nich sugerować, ale trzemać się tego co tu napisałem
+
+
+
+załączyłem security-audit-SKILL.md jako pewnego rodzjau przykład, można sie nim sugerować, ale to nie znaczy że ma być odtworzony na jego podbieństwo
+
+
+
+Wygeneruj go w polu RAW TEXT
+
+
+
+bardzo dokładnie przeanalizuj $quality-audit ,
+raport, który ma powstać ma być bardzo zbliżóny do tego jaki generuje $security-audit i ma pokrywać te punkty z Apps_scan\Wymagania.md które są oznaczona jako zad 2.
+skill $quality-audit jest za bardzo złożony, ma za dużo szeczegółów podanych głownie chodzi o opisy i strukturę, trzeba go skrócić, szlag mnie trafia jak pszesz tak obszernie
+bo to jest niezgone z dokumentacją. zapoznaj się z doku codex i claude code jak sie pisze skille i go popraw wzorując się na tej doku i na $security-audit głównie w zakresie jak ma wyglądąć raport.
+
+Ponadto mają być uwzględnione takie aspekty:
+- Finding mają być potwierdzone / dismissed
+- Dodaj do każdego finding informacje o obszarze (backend / frontend itp)
+- Dodaj zasadę, żeby nie robić buildów
+- Wymaż wszytskie nformacje, że aplikacje są .net to ma być uniwersalny skill
+
+NADRZĘDNYM CELEM JEST ZNALEZIENIE JAK NAJWIĘKSZEJ ILOŚĆI FINDINGÓW (UZASADNIONYCH!) dlatego skill nie moze mówić zbyt dokładnie co ma być szukanie, mają być wskazywane kierunki
+
+
+to popraw jeszcze to:
+⚠ Skipped loading 1 skill(s) due to invalid SKILL.md files.
+⚠ D:\Source\appsec-review-skills\.codex\skills\quality-audit\SKILL.md: invalid YAML: mapping values are not allowed in this context at line 2 column 69

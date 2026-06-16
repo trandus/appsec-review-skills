@@ -1,5 +1,5 @@
 ---
-name: security-audit
+name: security-audit-lukasz
 description: "Application audit for OWASP vulnerabilities"
 disable-model-invocation: true
 ---
