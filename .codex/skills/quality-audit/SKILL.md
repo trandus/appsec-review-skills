@@ -1,6 +1,6 @@
 ---
 name: quality-audit
-description: "Application quality audit for repository review: architecture, source code quality, bug risks, performance, tests, error handling, logging, quick wins, refactoring areas, technical priorities, and technical debt. Use for local quality/engineering-health audits of any application stack."
+description: "Application quality audit for repository review: architecture, source code quality, bug risks, performance, tests, error handling, logging, quick wins, refactoring areas, technical priorities, technical debt, and Jira-import JSON output. Use for local quality/engineering-health audits of any application stack."
 disable-model-invocation: true
 ---
 
@@ -14,15 +14,16 @@ This skill covers repository quality review: architecture, source quality, bug/a
 
 ## Defaults
 
-- Report language: Polish, unless the user explicitly provides `Report Language: <language>`.
-- Output file: `./quality-audits/quality-audit-<YYYY-MM-DD-HHmm>.md` in the reviewed repository root, unless the user provides another path.
+- Report and JSON file language: Polish with diacritics, unless the user explicitly provides `Report Language: <language>`.
+- Markdown output file: `./quality-audits/quality-audit-<YYYY-MM-DD-HHmm>.md` in the reviewed repository root, unless the user provides another path.
+- JSON output file: `./quality-audits/quality-audit-<YYYY-MM-DD-HHmm>.json` next to the Markdown report, unless the user disables JSON output or provides another path.
 - Normal mode: offline, local repository only, no internet, no GitHub, no SaaS, no runtime access, no external scanners, no fixes, and no package upgrades unless the user separately asks.
 - Do not run builds. Do not run commands whose main purpose is to compile, package, publish, container-build, restore remote dependencies, or launch the application.
 - Prefer read-only inspection and existing local evidence. Tests, linters, or analyzers may be read from existing output files; run them only if the user explicitly asks.
 
-Chat reply after writing the report:
+Chat reply after writing both files:
 
-`quality-audit-2026-05-20-1430.md - Findings: 12 (9 confirmed, 3 needs-verification), Dismissed: 4, Technical debt: medium`
+`quality-audit-2026-05-20-1430.md + quality-audit-2026-05-20-1430.json - Findings: 12 (9 confirmed, 3 needs-verification), Dismissed: 4, Technical debt: medium`
 
 ## Internal Recon
 
@@ -146,6 +147,40 @@ Confirmed findings first, then needs-verification.
 Investigated false positives useful for triage.
 
 ```
+
+## JSON Output
+
+Generate the JSON only after the Markdown report is complete and all candidates have been resolved through the Evidence Gate. Do not spend hunting time shaping JSON. Treat JSON generation as a final packaging step from the finished report.
+
+Create one parseable `.json` file for Jira import. The JSON is not an audit report; it is only an issue import payload. Its shape is closed: use exactly the keys shown below and no extra metadata, summaries, repository context, verification data, `findings`, or `dismissed` sections.
+
+```json
+{
+  "common": {
+    "labels": [
+      "<APPLICATION_NAME>"
+    ]
+  },
+  "issues": [
+    {
+      "summary": "[<APPLICATION_NAME>] QF-01 - <title>",
+      "description": "...",
+      "labels": [
+        "HIGH"
+      ]
+    }
+  ]
+}
+```
+
+Rules:
+
+1. Derive `issues` only from the final Markdown `## Findings` section. Include every `confirmed` and `needs-verification` finding; exclude dismissed items and rejected candidates.
+2. Use the reviewed application/repository name as `<APPLICATION_NAME>` unless the user provides `Application Name: <name>`.
+3. `common.labels` contains only `<APPLICATION_NAME>`. Each issue `labels` contains only the uppercase severity: `CRITICAL`, `HIGH`, `MEDIUM`, or `LOW`.
+4. `summary` format is `[<APPLICATION_NAME>] QF-01 - <title>`. Preserve the exact finding ID and title from the Markdown report.
+5. `description` uses Jira REST API / Atlassian Markdown formatting and carries the finding fields from the report: Severity, Confidence, Area, Category, Location, Evidence, Risk Path, Risk/Impact, Recommendation, Effort. Omit missing fields; do not invent details.
+6. Before writing the file, check that root keys are exactly `common` and `issues`; `common` has only `labels`; each issue has only `summary`, `description`, and `labels`.
 
 ### Finding format
 
