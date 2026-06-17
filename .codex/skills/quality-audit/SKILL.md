@@ -1,6 +1,6 @@
 ---
 name: quality-audit
-description: "Application quality audit for stage 2 repository review: architecture, source code quality, bug risks, performance, tests, error handling, logging, quick wins, refactoring areas, technical priorities, and technical debt. Use for local quality/engineering-health audits of any application stack."
+description: "Application quality audit for repository review: architecture, source code quality, bug risks, performance, tests, error handling, logging, quick wins, refactoring areas, technical priorities, and technical debt. Use for local quality/engineering-health audits of any application stack."
 disable-model-invocation: true
 ---
 
@@ -10,7 +10,7 @@ Run a local quality code review focused on finding the maximum number of justifi
 
 The goal is broad evidence-backed discovery, not a fixed checklist. Use the areas below as directions to hunt. Follow the repository shape, architecture, conventions, and domain flows. If there is a choice between polishing wording and checking another realistic code path, check the next code path.
 
-This skill covers `Apps_scan/Wymagania.md` items marked `zad. 2`: architecture, source quality, bug/antipattern risks, performance, test quality, error handling, logging, technical summary, improvement recommendations, technical priorities, refactoring areas, and technical debt estimate.
+This skill covers repository quality review: architecture, source quality, bug/antipattern risks, performance, test quality, error handling, logging, technical summary, improvement recommendations, technical priorities, refactoring areas, and technical debt estimate.
 
 ## Defaults
 
