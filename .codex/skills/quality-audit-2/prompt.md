@@ -41,19 +41,7 @@ Wyszukuj, weryfikuj i raportuj findingi wyłącznie w `MODULE_ROOT` oraz jego po
 13. Ustaw maksymalny timeout dla subagentów i bezwzględnie czekaj aż agenci zakończą pracę bez wysyłania poleceń nakazujących kończenie pracy.
 14. Wszystkie pliki zapisywane są w folderze OUTPUT_FOLDER
 15. Agent wiodący wykonuje pracę od początku do końca, nie zatrzymując się.
-16. Wszystkie findingi w raporcie końcowym zapisywane są w formacie:
-
-### F-nn - Tytuł
-
-- Severity: low | medium | high | critical
-- Confidence: confirmed | needs-verification
-- Location: względna ścieżka pliku, klasa/metoda, numer linii
-- Evidence: konkretny dowód w kodzie
-- Risk/Impact: opis ryzyka lub skutku
-- Risk Path:
-  punkty opisujące risk path
-- Recommendation: konkretna rekomendacja naprawy
-- Effort: small | medium | large
+16. Wszystkie findingi w raporcie końcowym zapisywane są w formacie opisanym w $quality-audit-2.
 
 ---
 
